@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: psychologist-notebook-bot
+bot:
+  name: psychologist-notebook
+  token: 12345
