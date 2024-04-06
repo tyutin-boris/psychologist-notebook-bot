@@ -2,5 +2,5 @@ spring:
   application:
     name: psychologist-notebook-bot
 bot:
-  name: psychologist-notebook
-  token: 12345
+  name: psy_note_book_test_bot
+  token: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q

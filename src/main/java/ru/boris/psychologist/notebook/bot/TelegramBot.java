@@ -28,4 +28,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return botConfig.getToken();
     }
+
+    @Override
+    public void onRegister() {
+        log.info("Bot was registered");
+        super.onRegister();
+    }
 }
