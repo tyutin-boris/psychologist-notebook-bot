@@ -7,6 +7,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.boris.psychologist.notebook.bot.service.MessageService;
 import ru.boris.psychologist.notebook.config.BotConfig;
 
 @Slf4j
@@ -16,11 +17,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
 
+    private final MessageService messageService;
+
     @Override
     public void onUpdateReceived(Update update) {
-        log.info(update.toString());
+        log.debug(update.toString());
 
-        send(update.getMessage().getChatId());
+        SendMessage message = messageService.getMessage(update);
+
+        message.setChatId(update.getMessage().getChatId());
+        send(message);
     }
 
     @Override
@@ -39,13 +45,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         super.onRegister();
     }
 
-    private void send(Long chatId){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText("Hello Boris");
-        sendMessage.setChatId(chatId);
+    private void send(SendMessage message){
 
         try {
-            execute(sendMessage);
+            execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
