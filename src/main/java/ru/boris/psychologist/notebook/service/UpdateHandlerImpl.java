@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.bot.service;
+package ru.boris.psychologist.notebook.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.boris.psychologist.notebook.bot.exception.MessageHandlerException;
-import ru.boris.psychologist.notebook.bot.service.api.UpdateHundler;
+import ru.boris.psychologist.notebook.exception.MessageHandlerException;
+import ru.boris.psychologist.notebook.service.api.UpdateHundler;
 
 import java.util.Optional;
 

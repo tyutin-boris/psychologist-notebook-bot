@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.bot.exception;
+package ru.boris.psychologist.notebook.exception;
 
 public class MessageHandlerException extends RuntimeException {
 

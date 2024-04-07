@@ -1,6 +1,11 @@
 spring:
   application:
     name: psychologist-notebook-bot
+
 bot:
   name: psy_note_book_test_bot
   token: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q
+
+logging:
+  level:
+    ru.boris.psychologist.notebook: DEBUG

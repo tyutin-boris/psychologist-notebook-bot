@@ -3,7 +3,6 @@ package ru.boris.psychologist.notebook.bot;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,12 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.boris.psychologist.notebook.bot.exception.SendMessageException;
-import ru.boris.psychologist.notebook.bot.service.api.UpdateHundler;
 import ru.boris.psychologist.notebook.config.BotConfig;
+import ru.boris.psychologist.notebook.service.api.UpdateHundler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -53,19 +49,6 @@ public class TelegramBotTest {
 
         // Проверка
         verify(sut).execute(newMessage);
-    }
-
-    @Test
-    public void should_throwException_when_updateIsNull() {
-        // Подготовка
-        String expected = "В сообщении отсутствует message";
-
-        // Действие
-        Executable executable = () -> sut.onUpdateReceived(new Update());
-
-        // Проверка
-        SendMessageException exc = assertThrows(SendMessageException.class, executable);
-        assertEquals(expected, exc.getMessage());
     }
 
     private Update getUpdate() {

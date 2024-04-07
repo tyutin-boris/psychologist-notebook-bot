@@ -5,14 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.boris.psychologist.notebook.bot.exception.SendMessageException;
-import ru.boris.psychologist.notebook.bot.service.api.UpdateHundler;
 import ru.boris.psychologist.notebook.config.BotConfig;
-
-import java.util.Optional;
+import ru.boris.psychologist.notebook.exception.SendMessageException;
+import ru.boris.psychologist.notebook.service.api.UpdateHundler;
 
 @Slf4j
 @Service
@@ -27,19 +24,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         log.debug("Получено событие: {}", update);
 
-        Message message = getMessage(update);
-        log.debug("Получено сообщение: {}", message);
-
         SendMessage newMessage = updateHundler.handle(update);
         log.debug("Создан ответ: {}", newMessage);
 
         send(newMessage);
-    }
-
-    private Message getMessage(Update update) {
-        return Optional.ofNullable(update)
-                .map(Update::getMessage)
-                .orElseThrow(() -> new SendMessageException("В сообщении отсутствует message"));
     }
 
     @Override
