@@ -37,10 +37,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private Message getMessage(Update update) {
-        return Optional.of(update)
+        return Optional.ofNullable(update)
                 .map(Update::getMessage)
-                .orElseThrow(() -> new SendMessageException(
-                        String.format("Не удалось получить message, для сообщения: %s", update)));
+                .orElseThrow(() -> new SendMessageException("В сообщении отсутствует message"));
     }
 
     @Override
@@ -64,10 +63,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new SendMessageException(
-                    String.format("Не удалось отправить ответ. chatId: %s, text: %s",
-                            message.getChatId(),
-                            message.getText()), e);
+            throw new SendMessageException("Не удалось отправить ответ", e);
         }
     }
 
