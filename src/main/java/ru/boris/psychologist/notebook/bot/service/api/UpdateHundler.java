@@ -1,9 +1,9 @@
-package ru.boris.psychologist.notebook.bot.service;
+package ru.boris.psychologist.notebook.bot.service.api;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface MessageService {
+public interface UpdateHundler {
 
-    SendMessage getMessage(Update update);
+    SendMessage handle(Update update);
 }

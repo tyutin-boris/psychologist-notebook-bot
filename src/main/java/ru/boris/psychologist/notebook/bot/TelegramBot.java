@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.bot.exception.SendMessageException;
-import ru.boris.psychologist.notebook.bot.service.MessageService;
+import ru.boris.psychologist.notebook.bot.service.api.UpdateHundler;
 import ru.boris.psychologist.notebook.config.BotConfig;
 
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
 
-    private final MessageService messageService;
+    private final UpdateHundler updateHundler;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -30,7 +30,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Message message = getMessage(update);
         log.debug("Получено сообщение: {}", message);
 
-        SendMessage newMessage = messageService.getMessage(update);
+        SendMessage newMessage = updateHundler.handle(update);
         log.debug("Создан ответ: {}", newMessage);
 
         send(newMessage);
@@ -65,12 +65,5 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new SendMessageException("Не удалось отправить ответ", e);
         }
-    }
-
-    private Long getChatId(Message message) {
-        return Optional.ofNullable(message)
-                .map(Message::getChatId)
-                .orElseThrow(() -> new SendMessageException(
-                        String.format("Не удалось получить catId, для сообщения: %s", message)));
     }
 }

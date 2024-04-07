@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.bot.exception.SendMessageException;
-import ru.boris.psychologist.notebook.bot.service.MessageService;
+import ru.boris.psychologist.notebook.bot.service.api.UpdateHundler;
 import ru.boris.psychologist.notebook.config.BotConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +30,7 @@ public class TelegramBotTest {
     private BotConfig botConfig;
 
     @Mock
-    private MessageService messageService;
+    private UpdateHundler updateHundler;
 
     @InjectMocks
     private TelegramBot sut;
@@ -45,7 +45,7 @@ public class TelegramBotTest {
         newMessage.setChatId(chatId);
         newMessage.setText("test");
 
-        when(messageService.getMessage(update))
+        when(updateHundler.handle(update))
                 .thenReturn(newMessage);
 
         // Действие
