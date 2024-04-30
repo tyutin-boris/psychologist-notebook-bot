@@ -9,3 +9,6 @@ bot:
 logging:
   level:
     ru.boris.psychologist.notebook: DEBUG
+
+server:
+  port: 9000
