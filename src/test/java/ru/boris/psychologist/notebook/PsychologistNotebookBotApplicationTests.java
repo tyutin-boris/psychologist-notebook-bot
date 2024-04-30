@@ -1,6 +1,5 @@
 package ru.boris.psychologist.notebook;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,11 +19,6 @@ class PsychologistNotebookBotApplicationTests {
     public static void start() {
         container.start();
     }
-
-//    @AfterAll
-//    public static void stop() {
-//        container.stop();
-//    }
 
     @DynamicPropertySource
     public static void configureProperty(DynamicPropertyRegistry registry) {
