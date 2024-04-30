@@ -2,14 +2,17 @@ spring:
   application:
     name: psychologist-notebook-bot
   datasource:
-    password: password
-    username: root
-    url: jdbc:postgresql://localhost:5432/test
+    password: postgres
+    username: postgres
+    url: jdbc:postgresql://psydb:5432/test
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create-drop
-
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 bot:
   name: psy_note_book_test_bot
   token: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q

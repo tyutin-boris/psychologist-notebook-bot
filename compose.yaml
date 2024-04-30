@@ -1,12 +1,29 @@
 version: '3.1'
 
 services:
-  db:
+  server:
+    container_name: psyapp
+    build:
+      context: .
+    ports:
+      - "9000:9000"
+    depends_on:
+      psydb:
+        condition: service_healthy
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://psydb:5432/test
+  psydb:
+    container_name: psydb
     image: postgres:14
     restart: always
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USERNAME: root
-      POSTGRES_PASSWORD: password
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: test
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
