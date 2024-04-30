@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: psychologist-notebook-bot
+
 bot:
   name: test-bot-name
   token: test-token

@@ -1,6 +1,14 @@
 spring:
   application:
     name: psychologist-notebook-bot
+  datasource:
+    password: password
+    username: root
+    url: jdbc:postgresql://localhost:5432/test
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 
 bot:
   name: psy_note_book_test_bot
