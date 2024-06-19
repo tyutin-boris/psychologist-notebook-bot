@@ -16,6 +16,7 @@ services:
     container_name: psy-db
     image: postgres:14
     restart: always
+    hostname: psydb
     ports:
       - "5432:5432"
     environment:

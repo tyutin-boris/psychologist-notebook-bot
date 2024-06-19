@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
-import ru.boris.psychologist.notebook.service.api.UpdateHundler;
+import ru.boris.psychologist.notebook.service.api.EventHandler;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,7 +26,7 @@ public class TelegramBotTest {
     private BotConfig botConfig;
 
     @Mock
-    private UpdateHundler updateHundler;
+    private EventHandler eventHandler;
 
     @InjectMocks
     private TelegramBot sut;
@@ -41,7 +41,7 @@ public class TelegramBotTest {
         newMessage.setChatId(chatId);
         newMessage.setText("test");
 
-        when(updateHundler.handle(update))
+        when(eventHandler.handle(update))
                 .thenReturn(newMessage);
 
         // Действие

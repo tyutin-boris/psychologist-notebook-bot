@@ -11,13 +11,13 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.boris.psychologist.notebook.exception.MessageHandlerException;
-import ru.boris.psychologist.notebook.service.UpdateHandlerImpl;
+import ru.boris.psychologist.notebook.service.EventHandlerImpl;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateHandlerImplTest {
+class EventHandlerImplTest {
 
     @InjectMocks
-    private UpdateHandlerImpl sut;
+    private EventHandlerImpl sut;
 
     @Test
     public void should_throwException_when_messageIsNull() {

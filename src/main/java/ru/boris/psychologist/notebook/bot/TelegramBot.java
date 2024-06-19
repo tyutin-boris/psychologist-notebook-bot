@@ -8,8 +8,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
+import ru.boris.psychologist.notebook.dto.ResponseDto;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
-import ru.boris.psychologist.notebook.service.api.UpdateHundler;
+import ru.boris.psychologist.notebook.mapper.EventDtoMapper;
+import ru.boris.psychologist.notebook.mapper.SendMessageMapper;
+import ru.boris.psychologist.notebook.service.api.EventHandler;
+import ru.boris.psychologist.notebook.dto.EventDto;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -17,17 +23,20 @@ import ru.boris.psychologist.notebook.service.api.UpdateHundler;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
-
-    private final UpdateHundler updateHundler;
+    private final EventHandler eventHandler;
+    private final EventDtoMapper eventDtoMapper;
+    private final SendMessageMapper sendMessageMapper;
 
     @Override
     public void onUpdateReceived(Update update) {
         log.debug("Получено событие: {}", update);
 
-        SendMessage newMessage = updateHundler.handle(update);
-        log.debug("Создан ответ: {}", newMessage);
+        EventDto eventDto = eventDtoMapper.toDto(update);
+        Optional<ResponseDto> responseDto = eventHandler.handle(eventDto);
 
-        send(newMessage);
+        responseDto.map(sendMessageMapper::toDto)
+                .ifPresent(this::send);
+        log.debug("Закончена обработка события: {}", update);
     }
 
     @Override
