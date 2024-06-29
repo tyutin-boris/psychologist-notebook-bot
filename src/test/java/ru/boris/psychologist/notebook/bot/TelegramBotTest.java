@@ -41,8 +41,8 @@ public class TelegramBotTest {
         newMessage.setChatId(chatId);
         newMessage.setText("test");
 
-        when(eventHandler.handle(update))
-                .thenReturn(newMessage);
+//        when(eventHandler.handle(update))
+//                .thenReturn(newMessage);
 
         // Действие
         sut.onUpdateReceived(update);

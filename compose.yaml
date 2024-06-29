@@ -1,17 +1,17 @@
 version: '3.1'
 
 services:
-  server:
-    container_name: psy-app
-    build:
-      context: .
-    ports:
-      - "9000:9000"
-    depends_on:
-      psydb:
-        condition: service_healthy
-    environment:
-      - POSTGRES_URL=jdbc:postgresql://psydb:5432/psynote
+#  server:
+#    container_name: psy-app
+#    build:
+#      context: .
+#    ports:
+#      - "9090:9090"
+#    depends_on:
+#      psydb:
+#        condition: service_healthy
+#    environment:
+#      - POSTGRES_URL=jdbc:postgresql://psydb:5432/psynote
   psydb:
     container_name: psy-db
     image: postgres:14

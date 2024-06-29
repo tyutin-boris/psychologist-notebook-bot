@@ -3,8 +3,6 @@ package ru.boris.psychologist.notebook.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.boris.psychologist.notebook.dto.EventDto;
@@ -48,6 +46,21 @@ public class EventHandlerImpl implements EventHandler {
 
     @Override
     public Optional<ResponseDto> handle(EventDto eventDto) {
+
+
+
+//        Message message = getMessage(eventDto);
+//                Long chatId = getChatId(message);
         return Optional.empty();
     }
+
+    private Long getChatId(Message message) {
+        return null;
+    }
+
+//    private Message getMessage(EventDto eventDto) {
+//        return Optional.ofNullable(eventDto)
+//                .map(Update::getMessage)
+//                .orElseThrow(() -> new MessageHandlerException("Отсутствует message"));
+//    }
 }

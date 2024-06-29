@@ -22,4 +22,4 @@ logging:
     ru.boris.psychologist.notebook: DEBUG
 
 server:
-  port: 9000
+  port: 9090

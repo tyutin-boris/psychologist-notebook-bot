@@ -7,6 +7,6 @@ WORKDIR ./app
 
 COPY ./target/psychologist-notebook-bot-0.0.1-SNAPSHOT.jar ./app.jar
 
-EXPOSE 9000
+EXPOSE 9090
 
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "app.jar"]

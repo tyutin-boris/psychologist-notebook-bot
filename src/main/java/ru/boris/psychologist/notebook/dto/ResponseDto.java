@@ -11,7 +11,7 @@ public final class ResponseDto {
     /**
      * Сообщение.
      */
-    private String message;
+    private String text;
 
     /**
      * Идентификатор чата.

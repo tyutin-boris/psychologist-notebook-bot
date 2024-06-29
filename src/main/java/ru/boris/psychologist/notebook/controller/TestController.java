@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.boris.psychologist.notebook.model.UserEntity;
-import ru.boris.psychologist.notebook.repository.UserRepository;
+import ru.boris.psychologist.notebook.model.repository.UserRepository;
 
 import java.util.List;
 

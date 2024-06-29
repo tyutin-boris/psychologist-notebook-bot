@@ -1,0 +1,30 @@
+{
+  "update_id": 204343326,
+  "message": {
+    "message_id": 13,
+    "from": {
+      "id": 586815794,
+      "first_name": "Boris",
+      "is_bot": false,
+      "last_name": "Tyutin",
+      "username": "btyutin",
+      "language_code": "ru"
+    },
+    "date": 1719655627,
+    "chat": {
+      "id": 586815794,
+      "type": "private",
+      "first_name": "Boris",
+      "last_name": "Tyutin",
+      "username": "btyutin"
+    },
+    "text": "/start",
+    "entities": [
+      {
+        "type": "bot_command",
+        "offset": 0,
+        "length": 6
+      }
+    ]
+  }
+}
