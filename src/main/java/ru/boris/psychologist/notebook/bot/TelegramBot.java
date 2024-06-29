@@ -1,5 +1,6 @@
 package ru.boris.psychologist.notebook.bot;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
 import ru.boris.psychologist.notebook.mapper.EventDtoMapper;
 import ru.boris.psychologist.notebook.mapper.SendMessageMapper;
+import ru.boris.psychologist.notebook.model.UpdateHistoryEntity;
+import ru.boris.psychologist.notebook.model.repository.UpdateHistoryRepository;
 import ru.boris.psychologist.notebook.service.api.EventHandler;
 
 import java.util.List;
@@ -36,6 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final EventHandler eventHandler;
     private final EventDtoMapper eventDtoMapper;
     private final SendMessageMapper sendMessageMapper;
+    private final UpdateHistoryRepository updateHistoryRepository;
 
     private final List<BotCommand> botCommands;
 
@@ -57,7 +61,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         log.debug("Получено событие: {}", update);
-        String json = objectMapper.writeValueAsString(update);
+        saveUpdateHistory(update);
 
         Optional.ofNullable(update)
                 .map(eventDtoMapper::toDto)
@@ -91,5 +95,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new SendMessageException("Не удалось отправить ответ", e);
         }
+    }
+
+    private void saveUpdateHistory(Update update) throws JsonProcessingException {
+        String json = objectMapper.writeValueAsString(update);
+        UpdateHistoryEntity entity = new UpdateHistoryEntity();
+        entity.setJson(json);
+        updateHistoryRepository.save(entity);
     }
 }

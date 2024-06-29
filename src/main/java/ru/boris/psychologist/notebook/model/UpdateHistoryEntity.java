@@ -21,7 +21,7 @@ public class UpdateHistoryEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "json", nullable = false)
+    @Column(name = "json", nullable = false, length = 3072)
     private String json;
 
     @Column(name = "create_date_time", nullable = false)
