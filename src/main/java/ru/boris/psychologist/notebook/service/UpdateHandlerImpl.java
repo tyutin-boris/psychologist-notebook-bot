@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.boris.psychologist.notebook.dto.EventDto;
+import ru.boris.psychologist.notebook.dto.UpdateDto;
 import ru.boris.psychologist.notebook.dto.ResponseDto;
-import ru.boris.psychologist.notebook.exception.MessageHandlerException;
-import ru.boris.psychologist.notebook.service.api.EventHandler;
+import ru.boris.psychologist.notebook.service.api.UpdateHandler;
 
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EventHandlerImpl implements EventHandler {
+public class UpdateHandlerImpl implements UpdateHandler {
 
 
 //    public SendMessage handle(Update update) {
@@ -45,7 +43,7 @@ public class EventHandlerImpl implements EventHandler {
 //    }
 
     @Override
-    public Optional<ResponseDto> handle(EventDto eventDto) {
+    public Optional<ResponseDto> handle(UpdateDto updateDto) {
 
 
 

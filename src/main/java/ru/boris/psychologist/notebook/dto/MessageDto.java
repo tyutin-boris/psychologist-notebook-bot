@@ -3,15 +3,20 @@ package ru.boris.psychologist.notebook.dto;
 import lombok.Data;
 
 /**
- * Событие полученное из телеграмма.
+ * Сообщение.
  */
 @Data
-public class EventDto {
+public class MessageDto {
+
+    /**
+     * Идентификатор сообщения.
+     */
+    private Integer messageId;
 
     /**
      * От кого пришло сообщение.
      */
-    private FromDto from;
+    private UserDto from;
 
 
     /**

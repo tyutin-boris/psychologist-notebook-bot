@@ -1,6 +1,6 @@
 package ru.boris.psychologist.notebook.service.api;
 
-import ru.boris.psychologist.notebook.dto.EventDto;
+import ru.boris.psychologist.notebook.dto.UpdateDto;
 import ru.boris.psychologist.notebook.dto.ResponseDto;
 
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Сервис для обработки события из телеграмма.
  */
-public interface EventHandler {
+public interface UpdateHandler {
 
-    Optional<ResponseDto> handle(EventDto eventDto);
+    Optional<ResponseDto> handle(UpdateDto updateDto);
 }

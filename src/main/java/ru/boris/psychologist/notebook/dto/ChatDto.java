@@ -11,7 +11,7 @@ public class ChatDto {
     /**
      * Идентификатор чата.
      */
-    private String id;
+    private Long id;
 
     /**
      * Тип чата
@@ -31,5 +31,5 @@ public class ChatDto {
     /**
      * Имя пользователя.
      */
-    private String username;
+    private String userName;
 }

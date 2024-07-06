@@ -12,10 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
-import ru.boris.psychologist.notebook.service.api.EventHandler;
+import ru.boris.psychologist.notebook.service.api.UpdateHandler;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TelegramBotTest {
@@ -26,7 +25,7 @@ public class TelegramBotTest {
     private BotConfig botConfig;
 
     @Mock
-    private EventHandler eventHandler;
+    private UpdateHandler updateHandler;
 
     @InjectMocks
     private TelegramBot sut;

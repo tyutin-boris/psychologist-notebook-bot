@@ -16,11 +16,11 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
-import ru.boris.psychologist.notebook.mapper.EventDtoMapper;
+import ru.boris.psychologist.notebook.mapper.UpdateDtoMapper;
 import ru.boris.psychologist.notebook.mapper.SendMessageMapper;
 import ru.boris.psychologist.notebook.model.UpdateHistoryEntity;
 import ru.boris.psychologist.notebook.model.repository.UpdateHistoryRepository;
-import ru.boris.psychologist.notebook.service.api.EventHandler;
+import ru.boris.psychologist.notebook.service.api.UpdateHandler;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +36,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ObjectMapper objectMapper;
 
     private final BotConfig botConfig;
-    private final EventHandler eventHandler;
-    private final EventDtoMapper eventDtoMapper;
+    private final UpdateHandler updateHandler;
+    private final UpdateDtoMapper updateDtoMapper;
     private final SendMessageMapper sendMessageMapper;
     private final UpdateHistoryRepository updateHistoryRepository;
 
@@ -64,8 +64,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         saveUpdateHistory(update);
 
         Optional.ofNullable(update)
-                .map(eventDtoMapper::toDto)
-                .flatMap(eventHandler::handle)
+                .map(updateDtoMapper::toDto)
+                .flatMap(updateHandler::handle)
                 .map(sendMessageMapper::toDto)
                 .ifPresent(this::send);
 

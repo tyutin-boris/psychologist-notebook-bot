@@ -6,12 +6,12 @@ import lombok.Data;
  * Информация об источнике сообщения.
  */
 @Data
-public class FromDto {
+public class UserDto {
 
     /**
      * Идентификатор пользователя.
      */
-    private String id;
+    private Long id;
 
     /**
      * Имя.
@@ -26,5 +26,5 @@ public class FromDto {
     /**
      * Имя пользователя.
      */
-    private String username;
+    private String userName;
 }
