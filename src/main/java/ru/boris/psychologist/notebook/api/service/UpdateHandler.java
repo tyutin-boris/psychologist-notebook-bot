@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.service.api;
+package ru.boris.psychologist.notebook.api.service;
 
 import ru.boris.psychologist.notebook.dto.UpdateDto;
 import ru.boris.psychologist.notebook.dto.ResponseDto;

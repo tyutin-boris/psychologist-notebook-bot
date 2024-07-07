@@ -18,9 +18,9 @@ import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
 import ru.boris.psychologist.notebook.mapper.UpdateDtoMapper;
 import ru.boris.psychologist.notebook.mapper.SendMessageMapper;
-import ru.boris.psychologist.notebook.model.UpdateHistoryEntity;
+import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
 import ru.boris.psychologist.notebook.model.repository.UpdateHistoryRepository;
-import ru.boris.psychologist.notebook.service.api.UpdateHandler;
+import ru.boris.psychologist.notebook.api.service.UpdateHandler;
 
 import java.util.List;
 import java.util.Optional;

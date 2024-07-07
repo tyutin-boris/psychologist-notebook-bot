@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.boris.psychologist.notebook.bot.container.BotTestContainer;
-import ru.boris.psychologist.notebook.model.UpdateHistoryEntity;
+import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

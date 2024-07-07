@@ -2,6 +2,8 @@ package ru.boris.psychologist.notebook.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Сообщение.
  */
@@ -23,4 +25,9 @@ public class MessageDto {
      * Чат из которого пришло сообщение.
      */
     private ChatDto chat;
+
+    /**
+     * .
+     */
+    private List<MessageEntityDto> entities;
 }

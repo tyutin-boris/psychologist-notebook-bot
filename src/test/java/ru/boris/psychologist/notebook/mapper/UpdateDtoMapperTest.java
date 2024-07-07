@@ -19,7 +19,8 @@ import ru.boris.psychologist.notebook.dto.UserDto;
         UpdateDtoMapperImpl.class,
         MessageDtoMapperImpl.class,
         UserDtoMapperImpl.class,
-        ChatDtoMapperImpl.class})
+        ChatDtoMapperImpl.class,
+        MessageEntityDtoMapperImpl.class})
 class UpdateDtoMapperTest {
 
     @Autowired

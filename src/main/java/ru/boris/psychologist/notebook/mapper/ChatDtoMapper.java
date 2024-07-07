@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import ru.boris.psychologist.notebook.dto.ChatDto;
 import ru.boris.psychologist.notebook.dto.ChatType;
 
-@Mapper(componentModel = "sting")
+@Mapper(componentModel = "spring")
 public interface ChatDtoMapper extends DtoToDto<Chat, ChatDto> {
 
     @Mapping(target = "type", source = "type", qualifiedByName = "getChatType")

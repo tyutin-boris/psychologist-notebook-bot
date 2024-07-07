@@ -1,0 +1,34 @@
+package ru.boris.psychologist.notebook.dto.command;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+
+@Slf4j
+@Getter
+@RequiredArgsConstructor
+public enum BotCommands {
+
+    START("/start", "Начало диалога"),
+    COMMAND_NOT_DEFINED("/not_defined", "Тип команды не определен");
+
+    private final String command;
+    private final String description;
+
+
+    public static BotCommands getBotCommands(String command) {
+        log.debug("Определение типа команды: {}", command);
+
+        if (command == null) {
+            log.error("Попытка определить команду для null, возвращён неопределенный тип.");
+            return BotCommands.COMMAND_NOT_DEFINED;
+        }
+
+        return switch (command) {
+            case "/start" -> BotCommands.START;
+            default -> BotCommands.COMMAND_NOT_DEFINED;
+        };
+    }
+}
