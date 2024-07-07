@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
 @Slf4j
 @Getter
 @RequiredArgsConstructor
@@ -23,12 +21,12 @@ public enum BotCommands {
 
         if (command == null) {
             log.error("Попытка определить команду для null, возвращён неопределенный тип.");
-            return BotCommands.COMMAND_NOT_DEFINED;
+            return COMMAND_NOT_DEFINED;
         }
 
         return switch (command) {
-            case "/start" -> BotCommands.START;
-            default -> BotCommands.COMMAND_NOT_DEFINED;
+            case "/start" -> START;
+            default -> COMMAND_NOT_DEFINED;
         };
     }
 }

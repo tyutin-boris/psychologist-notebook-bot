@@ -1,6 +1,7 @@
 package ru.boris.psychologist.notebook.dto;
 
 import lombok.Data;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public class MessageDto {
      * .
      */
     private List<MessageEntityDto> entities;
+
+    private InlineKeyboardMarkupDto replyMarkup;
 }
