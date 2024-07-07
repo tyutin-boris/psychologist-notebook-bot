@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.service.DefaultResponseService;
+import ru.boris.psychologist.notebook.api.service.PhoneNumberService;
 import ru.boris.psychologist.notebook.api.service.UpdateHandler;
 import ru.boris.psychologist.notebook.api.service.callback.CallbackQueryHandlers;
 import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
@@ -28,6 +29,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UpdateHandlerImpl implements UpdateHandler {
 
+    private final PhoneNumberService phoneNumberService;
+
     private final DefaultResponseService defaultResponseService;
 
     private final Map<BotCommands, BotCommandHandler> botCommandHandlers;
@@ -45,24 +48,39 @@ public class UpdateHandlerImpl implements UpdateHandler {
         if (messageIsPresent) {
             List<MessageEntityDto> messageEntities = getMessageEntities(updateDto);
             List<MessageEntityDto> messageEntitiesWithCommand = getMessageEntitiesWithCommand(messageEntities);
-            int messageEntitiesSize = messageEntitiesWithCommand.size();
+            int commandSize = messageEntitiesWithCommand.size();
 
-            if (messageEntitiesSize == 0) {
-                log.error("В сообщение нет команд. id: {}", updateId);
-                return defaultResponseService.createResponse(updateDto);
-            } else if (messageEntitiesSize > 1) {
-                log.error("В сообщение больше одной команды. id: {}", updateId);
-                return defaultResponseService.createResponse(updateDto);
+            if (commandSize != 0) {
+
+                if (commandSize > 1) {
+                    log.error("В сообщение больше одной команды. id: {}", updateId);
+                    return defaultResponseService.createResponse(updateDto);
+                }
+
+                MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
+                        .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
+
+                String command = messageEntityDto.getText();
+                BotCommands botCommands = BotCommands.getBotCommands(command);
+
+                response = Optional.ofNullable(botCommandHandlers.get(botCommands))
+                        .flatMap(handler -> handler.handle(updateDto));
             }
+            List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
+            int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
 
-            MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
-                    .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
+            if (phoneNumbersSize != 0) {
 
-            String command = messageEntityDto.getText();
-            BotCommands botCommands = BotCommands.getBotCommands(command);
+                if (phoneNumbersSize > 1) {
+                    log.error("В сообщение больше одного номера. id: {}", updateId);
+                    return defaultResponseService.createResponse(updateDto);
+                }
 
-            response = Optional.ofNullable(botCommandHandlers.get(botCommands))
-                    .flatMap(handler -> handler.handle(updateDto));
+                MessageEntityDto messageEntityDto = messageEntitiesWithPhoneNumber.stream().findFirst()
+                        .orElseThrow(() -> new RuntimeException("В сообщении нет ни одного номера id: " + updateId));
+
+                phoneNumberService.saveNumber(updateDto);
+            }
         }
 
         CallbackQueryDto callbackQuery = updateDto.getCallbackQuery();
@@ -97,6 +115,12 @@ public class UpdateHandlerImpl implements UpdateHandler {
         }
 
         return response;
+    }
+
+    private List<MessageEntityDto> getMessageEntitiesWithPhoneNumber(List<MessageEntityDto> messageEntities) {
+        return messageEntities.stream()
+                .filter(dto -> "phone_number".equals(dto.getType()))
+                .toList();
     }
 
     private List<InlineKeyboardButtonDto> getKeyboardButtons(List<List<InlineKeyboardButtonDto>> keyboardButtonsList) {
