@@ -9,6 +9,11 @@ import lombok.Data;
 public class PatientDto {
 
     /**
+     * Идентификатор телеграм пользователя.
+     */
+    private Long tgId;
+
+    /**
      * Имя.
      */
     private String firstName;

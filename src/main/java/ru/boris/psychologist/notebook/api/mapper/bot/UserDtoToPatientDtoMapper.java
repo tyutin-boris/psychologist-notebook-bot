@@ -10,6 +10,7 @@ import ru.boris.psychologist.notebook.dto.tg.UserDto;
 public interface UserDtoToPatientDtoMapper extends DtoToDto<UserDto, PatientDto> {
 
 
+    @Mapping(target = "tgId", source = "id")
     @Mapping(target = "username", source = "userName")
     @Mapping(target = "phoneNumber", ignore = true)
     @Mapping(target = "description", ignore = true)

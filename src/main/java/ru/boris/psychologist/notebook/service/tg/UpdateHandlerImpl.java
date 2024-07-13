@@ -79,7 +79,7 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 MessageEntityDto messageEntityDto = messageEntitiesWithPhoneNumber.stream().findFirst()
                         .orElseThrow(() -> new RuntimeException("В сообщении нет ни одного номера id: " + updateId));
 
-                phoneNumberService.saveNumber(updateDto);
+                return phoneNumberService.saveNumber(updateDto, messageEntityDto);
             }
         }
 

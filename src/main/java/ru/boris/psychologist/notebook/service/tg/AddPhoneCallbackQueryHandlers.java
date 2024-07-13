@@ -21,12 +21,13 @@ public class AddPhoneCallbackQueryHandlers implements CallbackQueryHandlers {
     @Override
     public Optional<ResponseDto> handle(UpdateDto dto) {
         Integer updateId = dto.getUpdateId();
+        log.debug("Получен запрос на добавление номера телефона. updateId: {}", updateId);
         Long chatId = Optional.ofNullable(dto.getCallbackQuery())
                 .map(CallbackQueryDto::getMessage)
                 .map(MessageDto::getChat)
                 .map(ChatDto::getId)
                 .orElseThrow(() -> new RuntimeException(
-                        String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
+                        String.format("Не удалось определить идентификатор чата. updateId: %s", updateId)));
 
         ResponseDto response = new ResponseDto();
         response.setText("Укажите пожалуйста ваш номер телефона по которому можно с вами связаться.");

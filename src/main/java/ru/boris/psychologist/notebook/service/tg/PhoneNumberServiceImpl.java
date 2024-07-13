@@ -3,24 +3,81 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.boris.psychologist.notebook.api.mapper.bot.UserDtoToPatientDtoMapper;
+import ru.boris.psychologist.notebook.api.service.bot.PatientService;
 import ru.boris.psychologist.notebook.api.service.tg.PhoneNumberService;
+import ru.boris.psychologist.notebook.dto.bot.PatientDto;
+import ru.boris.psychologist.notebook.dto.tg.ChatDto;
+import ru.boris.psychologist.notebook.dto.tg.MessageDto;
+import ru.boris.psychologist.notebook.dto.tg.MessageEntityDto;
+import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 
+import java.util.Optional;
+
 /**
- * Реализация сервиса для.
+ * Реализация сервиса для сохранения номера телефона пациента.
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PhoneNumberServiceImpl implements PhoneNumberService {
 
+    private final PatientService patientService;
+
+    private final UserDtoToPatientDtoMapper userDtoToPatientDtoMapper;
+
     @Override
-    public void saveNumber(UpdateDto updateDto) {
-        Integer updateId = updateDto.getUpdateId();
+    public Optional<ResponseDto> saveNumber(UpdateDto dto, MessageEntityDto messageDto) {
+        Integer updateId = dto.getUpdateId();
         log.debug("Старт сохранения номера телефона. id: {}", updateId);
 
+        Optional<MessageDto> message = Optional.ofNullable(dto.getMessage());
+        Long chatId = message
+                .map(MessageDto::getChat)
+                .map(ChatDto::getId)
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
 
 
-        log.debug("Конец сохранения номера телефона. id: {}", updateId);
+        if (messageDto == null) {
+            log.error("Не удалось сохранить номер телефона, информация о нем не получена. updateId: {}", updateId);
+            return errorResponse(chatId);
+        }
+
+        String messageType = messageDto.getType();
+        if (!"phone_number".equals(messageType)) {
+            log.error("Не удалось сохранить номер телефона, в полученном сообщении нет номера. updateId: {}", updateId);
+            return errorResponse(chatId);
+        }
+
+        String phoneNumber = messageDto.getText();
+        Optional<PatientDto> patientDto = message.map(MessageDto::getFrom)
+                .map(userDtoToPatientDtoMapper::toDto);
+
+        if (patientDto.isEmpty()) {
+            log.error("Не удалось сохранить номер телефона, нет информации о пациенте. updateId: {}", updateId);
+            return errorResponse(chatId);
+        }
+
+        boolean phoneIsUpdated = patientService.savePhoneNumber(phoneNumber, patientDto.get());
+        if (phoneIsUpdated) {
+            ResponseDto responseDto = new ResponseDto();
+            responseDto.setChatId(chatId);
+            responseDto.setText("Ваш номер телефона успешно сохранён");
+
+            log.debug("Конец сохранения номера телефона. id: {}", updateId);
+            return Optional.of(responseDto);
+        }
+
+        return errorResponse(chatId);
+    }
+
+    private Optional<ResponseDto> errorResponse(Long chatId) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setText("Не удалось сохранить номер телефона. Напишите <ТУТ ДОЛЖНА БЫТЬ ССЫЛКА>");
+        responseDto.setChatId(chatId);
+
+        return Optional.of(responseDto);
     }
 }

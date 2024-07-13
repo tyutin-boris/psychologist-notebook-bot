@@ -25,6 +25,9 @@ public class PatientEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(name = "tg_id", nullable = false, unique = true)
+    private Long tgId;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -44,5 +47,5 @@ public class PatientEntity {
     private OffsetDateTime createDateTime = OffsetDateTime.now();
 
     @Column(name = "update_date_time")
-    private OffsetDateTime update_date_time;
+    private OffsetDateTime updateDateTime;
 }
