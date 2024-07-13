@@ -1,6 +1,7 @@
 package ru.boris.psychologist.notebook.dto;
 
 import lombok.Data;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 /**
  * Класс ответа в телеграм.
@@ -17,4 +18,9 @@ public final class ResponseDto {
      * Идентификатор чата.
      */
     private Long chatId;
+
+    /**
+     * Кнопки прикрепляемые к сообщению.
+     */
+    private ReplyKeyboardDto replyMarkup;
 }

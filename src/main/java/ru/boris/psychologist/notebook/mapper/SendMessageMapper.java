@@ -6,10 +6,12 @@ import org.mapstruct.Named;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import ru.boris.psychologist.notebook.dto.ReplyKeyboardDto;
 import ru.boris.psychologist.notebook.dto.ResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface SendMessageMapper extends DtoToDto<ResponseDto, SendMessage> {
@@ -29,9 +31,19 @@ public interface SendMessageMapper extends DtoToDto<ResponseDto, SendMessage> {
     @Named("getReplyMarkup")
     default InlineKeyboardMarkup getReplyMarkup(ResponseDto responseDto) {
 
+        if (Objects.isNull(responseDto)) {
+            return null;
+        }
+
+        ReplyKeyboardDto replyMarkup = responseDto.getReplyMarkup();
+
+        if (Objects.isNull(replyMarkup)) {
+            return null;
+        }
+
         InlineKeyboardButton inlinekeyboardButton = new InlineKeyboardButton();
-        inlinekeyboardButton.setText("Добавить номер телефона.");
-        inlinekeyboardButton.setCallbackData("add_phone_number");
+        inlinekeyboardButton.setText(replyMarkup.getText());
+        inlinekeyboardButton.setCallbackData(replyMarkup.getCallbackData());
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         rowsInline.add(List.of(inlinekeyboardButton));

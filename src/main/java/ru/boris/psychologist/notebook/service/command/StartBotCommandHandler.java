@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
-import ru.boris.psychologist.notebook.dto.ChatDto;
-import ru.boris.psychologist.notebook.dto.MessageDto;
-import ru.boris.psychologist.notebook.dto.ResponseDto;
-import ru.boris.psychologist.notebook.dto.UpdateDto;
+import ru.boris.psychologist.notebook.dto.*;
 import ru.boris.psychologist.notebook.dto.command.BotCommands;
 
 import java.util.Optional;
@@ -31,9 +28,14 @@ public class StartBotCommandHandler implements BotCommandHandler {
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
 
+        ReplyKeyboardDto replyMarkup = new ReplyKeyboardDto();
+        replyMarkup.setText("Добавить номер телефона.");
+        replyMarkup.setCallbackData("add_phone_number");
+
         ResponseDto response = new ResponseDto();
         response.setChatId(chatId);
         response.setText("Привет! Я бот.");
+        response.setReplyMarkup(replyMarkup);
 
         log.debug("Обработчик команды /start, закончил обрабатывать событие с id: " + updateId);
 
