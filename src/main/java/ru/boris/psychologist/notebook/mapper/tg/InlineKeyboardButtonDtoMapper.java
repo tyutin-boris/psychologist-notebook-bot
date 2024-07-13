@@ -1,8 +1,10 @@
-package ru.boris.psychologist.notebook.mapper;
+package ru.boris.psychologist.notebook.mapper.tg;
 
 import org.mapstruct.Mapper;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.boris.psychologist.notebook.dto.tg.InlineKeyboardButtonDto;
+import ru.boris.psychologist.notebook.mapper.DtoListListToDtoListList;
+import ru.boris.psychologist.notebook.mapper.DtoToDto;
 
 import java.util.ArrayList;
 import java.util.List;

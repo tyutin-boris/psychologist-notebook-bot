@@ -16,8 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
-import ru.boris.psychologist.notebook.mapper.UpdateDtoMapper;
-import ru.boris.psychologist.notebook.mapper.SendMessageMapper;
+import ru.boris.psychologist.notebook.mapper.tg.UpdateDtoMapper;
+import ru.boris.psychologist.notebook.mapper.tg.SendMessageMapper;
 import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
 import ru.boris.psychologist.notebook.model.repository.UpdateHistoryRepository;
 import ru.boris.psychologist.notebook.api.service.UpdateHandler;

@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.mapper;
+package ru.boris.psychologist.notebook.mapper.tg;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.boris.psychologist.notebook.dto.tg.ReplyKeyboardDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
+import ru.boris.psychologist.notebook.mapper.DtoToDto;
 
 import java.util.ArrayList;
 import java.util.List;

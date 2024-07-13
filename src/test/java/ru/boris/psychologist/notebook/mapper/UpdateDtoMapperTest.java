@@ -14,6 +14,7 @@ import ru.boris.psychologist.notebook.dto.tg.ChatType;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 import ru.boris.psychologist.notebook.dto.tg.UserDto;
+import ru.boris.psychologist.notebook.mapper.tg.UpdateDtoMapper;
 
 @SpringJUnitConfig(classes = {
         UpdateDtoMapperImpl.class,
