@@ -2,7 +2,7 @@ package ru.boris.psychologist.notebook.mapper;
 
 import org.mapstruct.Mapper;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.boris.psychologist.notebook.dto.MessageDto;
+import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 
 @Mapper(componentModel = "spring", uses = {
         UserDtoMapper.class,

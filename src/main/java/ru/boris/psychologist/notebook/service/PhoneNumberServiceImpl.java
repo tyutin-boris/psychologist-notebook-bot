@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.service.PhoneNumberService;
-import ru.boris.psychologist.notebook.dto.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 
 /**
  * Реализация сервиса для.

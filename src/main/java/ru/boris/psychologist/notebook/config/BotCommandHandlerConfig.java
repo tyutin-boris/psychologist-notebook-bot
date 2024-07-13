@@ -3,7 +3,7 @@ package ru.boris.psychologist.notebook.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
-import ru.boris.psychologist.notebook.dto.command.BotCommands;
+import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
 
 import java.util.List;
 import java.util.Map;

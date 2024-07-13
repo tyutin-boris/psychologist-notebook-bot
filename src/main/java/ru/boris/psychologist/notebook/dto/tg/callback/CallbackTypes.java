@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.dto.callback;
+package ru.boris.psychologist.notebook.dto.tg.callback;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

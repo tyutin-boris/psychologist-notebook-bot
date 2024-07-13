@@ -1,9 +1,6 @@
-package ru.boris.psychologist.notebook.dto;
+package ru.boris.psychologist.notebook.dto.tg;
 
 import lombok.Data;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-
-import java.util.List;
 
 /**
  * Событие полученное из, телеграмма.

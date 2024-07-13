@@ -6,8 +6,8 @@ import org.mapstruct.Named;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.boris.psychologist.notebook.dto.ReplyKeyboardDto;
-import ru.boris.psychologist.notebook.dto.ResponseDto;
+import ru.boris.psychologist.notebook.dto.tg.ReplyKeyboardDto;
+import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;

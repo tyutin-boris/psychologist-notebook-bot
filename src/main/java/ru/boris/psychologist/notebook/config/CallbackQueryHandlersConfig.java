@@ -3,7 +3,7 @@ package ru.boris.psychologist.notebook.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.boris.psychologist.notebook.api.service.callback.CallbackQueryHandlers;
-import ru.boris.psychologist.notebook.dto.callback.CallbackTypes;
+import ru.boris.psychologist.notebook.dto.tg.callback.CallbackTypes;
 
 import java.util.List;
 import java.util.Map;

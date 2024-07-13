@@ -2,7 +2,7 @@ package ru.boris.psychologist.notebook.mapper;
 
 import org.mapstruct.Mapper;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.boris.psychologist.notebook.dto.InlineKeyboardButtonDto;
+import ru.boris.psychologist.notebook.dto.tg.InlineKeyboardButtonDto;
 
 import java.util.ArrayList;
 import java.util.List;

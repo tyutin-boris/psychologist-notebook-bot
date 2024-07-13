@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.service.DefaultResponseService;
-import ru.boris.psychologist.notebook.dto.ChatDto;
-import ru.boris.psychologist.notebook.dto.MessageDto;
-import ru.boris.psychologist.notebook.dto.ResponseDto;
-import ru.boris.psychologist.notebook.dto.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.ChatDto;
+import ru.boris.psychologist.notebook.dto.tg.MessageDto;
+import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
+import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 
 import java.util.Optional;
 

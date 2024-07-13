@@ -9,11 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import ru.boris.psychologist.notebook.dto.ChatDto;
-import ru.boris.psychologist.notebook.dto.ChatType;
-import ru.boris.psychologist.notebook.dto.MessageDto;
-import ru.boris.psychologist.notebook.dto.UpdateDto;
-import ru.boris.psychologist.notebook.dto.UserDto;
+import ru.boris.psychologist.notebook.dto.tg.ChatDto;
+import ru.boris.psychologist.notebook.dto.tg.ChatType;
+import ru.boris.psychologist.notebook.dto.tg.MessageDto;
+import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.UserDto;
 
 @SpringJUnitConfig(classes = {
         UpdateDtoMapperImpl.class,

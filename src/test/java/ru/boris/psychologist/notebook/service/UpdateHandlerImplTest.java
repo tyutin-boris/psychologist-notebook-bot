@@ -9,15 +9,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.boris.psychologist.notebook.api.service.DefaultResponseService;
 import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
-import ru.boris.psychologist.notebook.dto.UpdateDto;
-import ru.boris.psychologist.notebook.dto.command.BotCommands;
+import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
 import ru.boris.psychologist.notebook.service.command.NotDefinedBotCommandHandler;
 import ru.boris.psychologist.notebook.service.command.StartBotCommandHandler;
 
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateHandlerImplTest {

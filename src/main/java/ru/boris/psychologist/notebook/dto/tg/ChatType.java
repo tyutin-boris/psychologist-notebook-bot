@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.dto;
+package ru.boris.psychologist.notebook.dto.tg;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

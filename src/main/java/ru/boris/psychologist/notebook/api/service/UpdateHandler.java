@@ -1,7 +1,7 @@
 package ru.boris.psychologist.notebook.api.service;
 
-import ru.boris.psychologist.notebook.dto.UpdateDto;
-import ru.boris.psychologist.notebook.dto.ResponseDto;
+import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 
 import java.util.Optional;
 
