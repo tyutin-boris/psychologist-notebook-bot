@@ -33,7 +33,9 @@ public class DefaultResponseServiceImpl implements DefaultResponseService {
 
         ResponseDto response = new ResponseDto();
         response.setChatId(chatId);
-        response.setText("Возникли не предвиденные ошибки, приносим свои извинения.");
+        response.setText("Понятие не имею что с этим делать. " +
+                "Попробуйте выбрать команду из списка доступных нажав кнопку " +
+                "Меню с лева от поля ввода текста.");
 
         return Optional.of(response);
     }

@@ -33,7 +33,7 @@ public class NotDefinedBotCommandHandler implements BotCommandHandler {
 
         ResponseDto response = new ResponseDto();
         response.setChatId(chatId);
-        response.setText("Я не умею выполнять такую команду. Попробуйте выбрать команду из Меню с права" +
+        response.setText("Я не умею выполнять такую команду. Попробуйте выбрать команду из Меню с лева" +
                 " от поля ввода текста.");
 
         log.debug("Обработчик команды /not_defined, закончил обрабатывать событие с id: " + updateId);
