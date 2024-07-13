@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.config.BotConfig;
-import ru.boris.psychologist.notebook.api.service.UpdateHandler;
+import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
 
 import static org.mockito.Mockito.verify;
 

@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.boris.psychologist.notebook.api.mapper.tg.SendMessageMapperImpl;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
-import ru.boris.psychologist.notebook.mapper.tg.SendMessageMapper;
+import ru.boris.psychologist.notebook.api.mapper.tg.SendMessageMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

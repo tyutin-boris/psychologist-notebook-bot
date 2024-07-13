@@ -7,12 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.boris.psychologist.notebook.api.service.DefaultResponseService;
-import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
+import ru.boris.psychologist.notebook.api.service.tg.DefaultResponseService;
+import ru.boris.psychologist.notebook.api.service.tg.command.BotCommandHandler;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
-import ru.boris.psychologist.notebook.service.command.NotDefinedBotCommandHandler;
-import ru.boris.psychologist.notebook.service.command.StartBotCommandHandler;
+import ru.boris.psychologist.notebook.service.tg.UpdateHandlerImpl;
+import ru.boris.psychologist.notebook.service.tg.command.NotDefinedBotCommandHandler;
+import ru.boris.psychologist.notebook.service.tg.command.StartBotCommandHandler;
 
 import java.util.Map;
 
