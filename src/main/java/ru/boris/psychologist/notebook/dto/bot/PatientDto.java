@@ -11,7 +11,7 @@ public class PatientDto {
     /**
      * Имя.
      */
-    private String name;
+    private String firstName;
 
     /**
      * Фамилия.

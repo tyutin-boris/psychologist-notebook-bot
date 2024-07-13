@@ -1,9 +1,12 @@
-package ru.boris.psychologist.notebook.service.command;
+package ru.boris.psychologist.notebook.service.tg.command;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.service.command.BotCommandHandler;
+import org.springframework.transaction.annotation.Transactional;
+import ru.boris.psychologist.notebook.api.mapper.bot.UserDtoToPatientDtoMapper;
+import ru.boris.psychologist.notebook.api.service.bot.PatientService;
+import ru.boris.psychologist.notebook.api.service.tg.command.BotCommandHandler;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.ReplyKeyboardDto;
@@ -21,12 +24,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StartBotCommandHandler implements BotCommandHandler {
 
+    private final PatientService patientService;
+
+    private final UserDtoToPatientDtoMapper userDtoToPatientDtoMapper;
+
     @Override
+    @Transactional
     public Optional<ResponseDto> handle(UpdateDto dto) {
         Integer updateId = dto.getUpdateId();
         log.debug("Обработчик команды /start, начал обрабатывать событие с id: " + updateId);
 
-        Long chatId = Optional.ofNullable(dto.getMessage())
+        Optional<MessageDto> message = Optional.ofNullable(dto.getMessage());
+
+        Long chatId = message
                 .map(MessageDto::getChat)
                 .map(ChatDto::getId)
                 .orElseThrow(() -> new RuntimeException(
@@ -40,6 +50,10 @@ public class StartBotCommandHandler implements BotCommandHandler {
         response.setChatId(chatId);
         response.setText("Привет! Я бот.");
         response.setReplyMarkup(replyMarkup);
+
+        message.map(MessageDto::getFrom)
+                .map(userDtoToPatientDtoMapper::toDto)
+                .ifPresent(patientService::saveIfNotExist);
 
         log.debug("Обработчик команды /start, закончил обрабатывать событие с id: " + updateId);
 
