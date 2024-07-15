@@ -6,11 +6,10 @@ import org.mapstruct.Named;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import ru.boris.psychologist.notebook.api.mapper.DtoToDto;
 import ru.boris.psychologist.notebook.dto.tg.ReplyKeyboardDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
-import ru.boris.psychologist.notebook.api.mapper.DtoToDto;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,22 +35,27 @@ public interface SendMessageMapper extends DtoToDto<ResponseDto, SendMessage> {
             return null;
         }
 
-        ReplyKeyboardDto replyMarkup = responseDto.getReplyMarkup();
+        List<ReplyKeyboardDto> replyMarkups = responseDto.getReplyMarkup();
 
-        if (Objects.isNull(replyMarkup)) {
+        if (replyMarkups == null || replyMarkups.isEmpty()) {
             return null;
         }
 
-        InlineKeyboardButton inlinekeyboardButton = new InlineKeyboardButton();
-        inlinekeyboardButton.setText(replyMarkup.getText());
-        inlinekeyboardButton.setCallbackData(replyMarkup.getCallbackData());
-
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        rowsInline.add(List.of(inlinekeyboardButton));
+        List<InlineKeyboardButton> inlineKeyboardButtons = replyMarkups.stream()
+                .map(this::getInlineKeyboardButton)
+                .toList();
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        markupInline.setKeyboard(rowsInline);
+        markupInline.setKeyboard(List.of(inlineKeyboardButtons));
 
         return markupInline;
+    }
+
+    default InlineKeyboardButton getInlineKeyboardButton(ReplyKeyboardDto dto) {
+        InlineKeyboardButton inlinekeyboardButton = new InlineKeyboardButton();
+        inlinekeyboardButton.setText(dto.getText());
+        inlinekeyboardButton.setCallbackData(dto.getCallbackData());
+
+        return inlinekeyboardButton;
     }
 }

@@ -95,16 +95,9 @@ public class UpdateHandlerImpl implements UpdateHandler {
             if (keyboardButtonsSize == 0) {
                 log.error("В сообщение нет ответа на запрос. id: {}", updateId);
                 return defaultResponseService.createResponse(updateDto);
-            } else if (keyboardButtonsSize > 1) {
-                log.error("В сообщение больше одного ответа на запрос. id: {}", updateId);
-                return defaultResponseService.createResponse(updateDto);
             }
 
-            InlineKeyboardButtonDto keyboardButtonDto = keyboardButtons.stream()
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("В сообщение нет ответа на запрос. id: " + updateId));
-
-            CallbackTypes callbackType = CallbackTypes.getCallbackType(keyboardButtonDto.getCallbackData());
+            CallbackTypes callbackType = CallbackTypes.getCallbackType(callbackQuery.getData());
 
             response = Optional.ofNullable(callbackQueryHandlers.get(callbackType))
                     .flatMap(handler -> handler.handle(updateDto));

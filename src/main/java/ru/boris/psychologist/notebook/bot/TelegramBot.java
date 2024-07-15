@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,13 +13,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.boris.psychologist.notebook.config.BotConfig;
-import ru.boris.psychologist.notebook.exception.SendMessageException;
-import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
 import ru.boris.psychologist.notebook.api.mapper.tg.SendMessageMapper;
-import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
+import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
 import ru.boris.psychologist.notebook.api.repository.UpdateHistoryRepository;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
+import ru.boris.psychologist.notebook.config.BotConfig;
+import ru.boris.psychologist.notebook.exception.SendMessageException;
+import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +56,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         log.debug("Получено событие: {}", update);
@@ -97,10 +95,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void saveUpdateHistory(Update update) throws JsonProcessingException {
-        String json = objectMapper.writeValueAsString(update);
+    private void saveUpdateHistory(Update update) {
+        String json = getString(update);
         UpdateHistoryEntity entity = new UpdateHistoryEntity();
         entity.setJson(json);
         updateHistoryRepository.save(entity);
+    }
+
+    private String getString(Update update) {
+        try {
+            return objectMapper.writeValueAsString(update);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -14,6 +14,7 @@ import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,14 +43,13 @@ public class StartBotCommandHandler implements BotCommandHandler {
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
 
-        ReplyKeyboardDto replyMarkup = new ReplyKeyboardDto();
-        replyMarkup.setText("Добавить номер телефона.");
-        replyMarkup.setCallbackData("add_phone_number");
+        ReplyKeyboardDto addPhoneNumber = getKeyboardForAddPhoneNumber();
+        ReplyKeyboardDto addDescription = getKeyboardForAddDescription();
 
         ResponseDto response = new ResponseDto();
         response.setChatId(chatId);
         response.setText("Привет! Я бот.");
-        response.setReplyMarkup(replyMarkup);
+        response.setReplyMarkup(List.of(addPhoneNumber, addDescription));
 
         message.map(MessageDto::getFrom)
                 .map(userDtoToPatientDtoMapper::toDto)
@@ -63,5 +63,19 @@ public class StartBotCommandHandler implements BotCommandHandler {
     @Override
     public BotCommands getCommand() {
         return BotCommands.START;
+    }
+
+    private ReplyKeyboardDto getKeyboardForAddPhoneNumber() {
+        ReplyKeyboardDto replyMarkup = new ReplyKeyboardDto();
+        replyMarkup.setText("Добавить номер телефона.");
+        replyMarkup.setCallbackData("add_phone_number");
+        return replyMarkup;
+    }
+
+    private ReplyKeyboardDto getKeyboardForAddDescription() {
+        ReplyKeyboardDto replyMarkup = new ReplyKeyboardDto();
+        replyMarkup.setText("Описать проблему.");
+        replyMarkup.setCallbackData("add_description");
+        return replyMarkup;
     }
 }

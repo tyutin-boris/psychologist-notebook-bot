@@ -2,6 +2,8 @@ package ru.boris.psychologist.notebook.dto.tg;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Класс ответа в телеграм.
  */
@@ -21,5 +23,5 @@ public final class ResponseDto {
     /**
      * Кнопки прикрепляемые к сообщению.
      */
-    private ReplyKeyboardDto replyMarkup;
+    private List<ReplyKeyboardDto> replyMarkup;
 }

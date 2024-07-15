@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public enum CallbackTypes {
 
     ADD_PHONE_NUMBER("Добавить номер телефона.", "add_phone_number"),
+    ADD_DESCRIPTION("Описать проблему.", "add_description"),
     NOT_DEFINED_CALLBACK_TYPE("", "not_defined_callback_type");
 
     private final String text;
@@ -23,6 +24,7 @@ public enum CallbackTypes {
 
         return switch (callbackData) {
             case "add_phone_number" -> ADD_PHONE_NUMBER;
+            case "add_description" -> ADD_DESCRIPTION;
             default -> NOT_DEFINED_CALLBACK_TYPE;
         };
     }

@@ -6,4 +6,6 @@ import lombok.Data;
 public class CallbackQueryDto {
 
     private MessageDto message;
+
+    private String data;
 }
