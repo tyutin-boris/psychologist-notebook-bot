@@ -3,12 +3,14 @@ package ru.boris.psychologist.notebook.service.tg.callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.boris.psychologist.notebook.api.mapper.tg.message.history.PatientMessageHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.callback.CallbackQueryHandlers;
 import ru.boris.psychologist.notebook.dto.tg.CallbackQueryDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.UserDto;
 import ru.boris.psychologist.notebook.dto.tg.callback.CallbackTypes;
 
 import java.util.Optional;
@@ -17,6 +19,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AddPhoneCallbackQueryHandlers implements CallbackQueryHandlers {
+
+    private final PatientMessageHistoryService patientMessageHistoryService;
 
     @Override
     public Optional<ResponseDto> handle(UpdateDto dto) {
@@ -28,6 +32,19 @@ public class AddPhoneCallbackQueryHandlers implements CallbackQueryHandlers {
                 .map(ChatDto::getId)
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Не удалось определить идентификатор чата. updateId: %s", updateId)));
+
+        Optional<Long> patientId = Optional.of(dto)
+                .map(UpdateDto::getCallbackQuery)
+                .map(CallbackQueryDto::getMessage)
+                .map(MessageDto::getFrom)
+                .map(UserDto::getId);
+
+        if (patientId.isEmpty()) {
+            log.error("Не удалось сохранить запись об запросе на добавление телефона," +
+                    " у пользователя нет идентификатора. updateId: {}", updateId);
+        }
+
+        patientId.ifPresent(id -> patientMessageHistoryService.saveAddPhoneNumberHistory(id, updateId));
 
         ResponseDto response = new ResponseDto();
         response.setText("Укажите пожалуйста ваш номер телефона по которому можно с вами связаться.");
