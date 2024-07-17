@@ -8,6 +8,8 @@ import ru.boris.psychologist.notebook.api.repository.PatientMessageHistoryReposi
 import ru.boris.psychologist.notebook.model.entity.PatientMessageHistoryEntity;
 import ru.boris.psychologist.notebook.model.entity.PatientMessageHistoryType;
 
+import java.util.Optional;
+
 /**
  * Реализация сервиса для.
  */
@@ -21,7 +23,7 @@ public class PatientMessageHistoryServiceImpl implements PatientMessageHistorySe
     @Override
     public void saveAddPhoneNumberHistory(Long patientId, Integer updateId) {
         if (patientId == null) {
-            log.error("Не удалось сохранить запись об запросе на добавление телефона," +
+            log.error("Не удалось сохранить запись о запросе на добавление телефона," +
                     " у пользователя нет идентификатора. updateId: {}", updateId);
             return;
         }
@@ -33,5 +35,26 @@ public class PatientMessageHistoryServiceImpl implements PatientMessageHistorySe
         patientMessageHistoryRepository.save(entity);
         log.debug("Сохранена запись о запросе на добавление телефона," +
                 " для пользователя: {},  updateId: {}", patientId, updateId);
+    }
+
+    @Override
+    public Optional<PatientMessageHistoryEntity> findLastMessageByPatientId(Long patientId) {
+        return patientMessageHistoryRepository.findFirstByPatientIdOrderByCreateDateTimeDesc(patientId);
+    }
+
+    @Override
+    public void saveAddedPhoneNumberHistory(Long patientId, Integer updateId) {
+        if (patientId == null) {
+            log.error("Не удалось сохранить запись о добавлении телефона," +
+                    " у пользователя нет идентификатора. updateId: {}", updateId);
+            return;
+        }
+
+        PatientMessageHistoryEntity entity = new PatientMessageHistoryEntity();
+        entity.setPatientId(patientId);
+        entity.setHistoryType(PatientMessageHistoryType.ADDED_PHONE_NUMBER);
+
+        patientMessageHistoryRepository.save(entity);
+        log.debug("Сохранена запись о добавлении телефона, для пользователя: {},  updateId: {}", patientId, updateId);
     }
 }

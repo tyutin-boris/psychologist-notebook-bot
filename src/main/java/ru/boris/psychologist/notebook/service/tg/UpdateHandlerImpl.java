@@ -3,6 +3,7 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.boris.psychologist.notebook.api.mapper.tg.message.history.PatientMessageHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.DefaultResponseService;
 import ru.boris.psychologist.notebook.api.service.tg.PhoneNumberService;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
@@ -15,8 +16,11 @@ import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageEntityDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
+import ru.boris.psychologist.notebook.dto.tg.UserDto;
 import ru.boris.psychologist.notebook.dto.tg.callback.CallbackTypes;
 import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
+import ru.boris.psychologist.notebook.model.entity.PatientMessageHistoryEntity;
+import ru.boris.psychologist.notebook.model.entity.PatientMessageHistoryType;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +40,8 @@ public class UpdateHandlerImpl implements UpdateHandler {
     private final Map<BotCommands, BotCommandHandler> botCommandHandlers;
 
     private final Map<CallbackTypes, CallbackQueryHandlers> callbackQueryHandlers;
+
+    private final PatientMessageHistoryService patientMessageHistoryService;
 
     @Override
     public Optional<ResponseDto> handle(UpdateDto updateDto) {
@@ -66,6 +72,7 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 response = Optional.ofNullable(botCommandHandlers.get(botCommands))
                         .flatMap(handler -> handler.handle(updateDto));
             }
+
             List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
             int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
 
@@ -79,7 +86,25 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 MessageEntityDto messageEntityDto = messageEntitiesWithPhoneNumber.stream().findFirst()
                         .orElseThrow(() -> new RuntimeException("В сообщении нет ни одного номера id: " + updateId));
 
-                return phoneNumberService.saveNumber(updateDto, messageEntityDto);
+                Optional<Long> patientIdOpt = Optional.ofNullable(updateDto.getMessage())
+                        .map(MessageDto::getFrom)
+                        .map(UserDto::getId);
+
+                if (patientIdOpt.isEmpty()) {
+                    log.error("Не удалось сохранить номер, нет идентификатора пользователя. updateId: {}", updateId);
+                }
+
+                Long patientId = patientIdOpt.get();
+                Optional<PatientMessageHistoryType> historyType = patientMessageHistoryService
+                        .findLastMessageByPatientId(patientId)
+                        .map(PatientMessageHistoryEntity::getHistoryType);
+
+                if (historyType.isPresent() && PatientMessageHistoryType.ADD_PHONE_NUMBER.equals(historyType.get())) {
+                    Optional<ResponseDto> responseDto = phoneNumberService.saveNumber(updateDto, messageEntityDto);
+                    patientMessageHistoryService.saveAddedPhoneNumberHistory(patientId, updateId);
+                    return responseDto;
+                }
+
             }
         }
 

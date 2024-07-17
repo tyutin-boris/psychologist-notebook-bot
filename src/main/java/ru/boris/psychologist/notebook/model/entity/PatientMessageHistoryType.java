@@ -7,5 +7,7 @@ public enum PatientMessageHistoryType {
 
     ADD_DESCRIPTION,
 
-    ADD_PHONE_NUMBER;
+    ADD_PHONE_NUMBER,
+
+    ADDED_PHONE_NUMBER;
 }

@@ -36,8 +36,8 @@ public class AddPhoneCallbackQueryHandlers implements CallbackQueryHandlers {
         Optional<Long> patientId = Optional.of(dto)
                 .map(UpdateDto::getCallbackQuery)
                 .map(CallbackQueryDto::getMessage)
-                .map(MessageDto::getFrom)
-                .map(UserDto::getId);
+                .map(MessageDto::getChat)
+                .map(ChatDto::getId);
 
         if (patientId.isEmpty()) {
             log.error("Не удалось сохранить запись об запросе на добавление телефона," +
