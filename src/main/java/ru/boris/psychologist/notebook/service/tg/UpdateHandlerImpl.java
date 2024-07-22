@@ -77,18 +77,8 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 return defaultResponseService.createResponse(updateDto);
             }
 
-            MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
-                    .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
-
-            String command = messageEntityDto.getText();
-            BotCommands botCommands = BotCommands.getBotCommands(command);
-
-            return Optional.ofNullable(botCommandHandlers.get(botCommands))
-                    .flatMap(handler -> handler.handle(updateDto));
+            return commandHandler(updateDto, messageEntitiesWithCommand);
         }
-
-        List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
-        int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
 
         Optional<Long> patientIdOpt = Optional.ofNullable(updateDto.getMessage())
                 .map(MessageDto::getFrom)
@@ -104,11 +94,8 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 .findLastMessageByPatientId(patientId)
                 .map(PatientMessageHistoryEntity::getHistoryType);
 
-        if (historyType.isPresent() && PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType.get())) {
-            Optional<ResponseDto> responseDto = descriptionService.saveDescription(updateDto);
-            patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
-            return responseDto;
-        }
+        List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
+        int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
 
         if (phoneNumbersSize != 0) {
             if (phoneNumbersSize > 1) {
@@ -116,21 +103,61 @@ public class UpdateHandlerImpl implements UpdateHandler {
                 return defaultResponseService.createResponse(updateDto);
             }
 
-            Optional<MessageEntityDto> messageEntityDto = messageEntitiesWithPhoneNumber.stream()
-                    .findFirst();
-            if (messageEntityDto.isEmpty()) {
-                log.error("В сообщении нет ни одного номера id: " + updateId);
-                return defaultResponseService.createResponse(updateDto);
-            }
+            return phoneNumbersHandler(historyType, patientId, updateDto, messageEntitiesWithPhoneNumber);
+        }
 
-            if (historyType.isPresent() && PatientMessageHistoryType.ADD_PHONE_NUMBER.equals(historyType.get())) {
-                Optional<ResponseDto> responseDto = phoneNumberService.saveNumber(updateDto, messageEntityDto.get());
-                patientMessageHistoryService.saveAddedPhoneNumberHistory(patientId, updateId);
-                return responseDto;
-            }
+        return descriptionHandler(historyType, patientId, updateDto);
+    }
+
+    private Optional<ResponseDto> descriptionHandler(
+            Optional<PatientMessageHistoryType> historyType,
+            Long patientId,
+            UpdateDto updateDto) {
+        Integer updateId = updateDto.getUpdateId();
+
+        if (historyType.isPresent() && PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType.get())) {
+            Optional<ResponseDto> responseDto = descriptionService.saveDescription(updateDto);
+            patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
+            return responseDto;
         }
 
         return defaultResponseService.createResponse(updateDto);
+    }
+
+    private Optional<ResponseDto> phoneNumbersHandler(
+            Optional<PatientMessageHistoryType> historyType,
+            Long patientId, UpdateDto updateDto,
+            List<MessageEntityDto> messageEntitiesWithPhoneNumber) {
+
+        Integer updateId = updateDto.getUpdateId();
+        Optional<MessageEntityDto> messageEntityDto = messageEntitiesWithPhoneNumber.stream()
+                .findFirst();
+
+        if (messageEntityDto.isEmpty()) {
+            log.error("В сообщении нет ни одного номера id: " + updateId);
+            return defaultResponseService.createResponse(updateDto);
+        }
+
+        if (historyType.isPresent() && PatientMessageHistoryType.ADD_PHONE_NUMBER.equals(historyType.get())) {
+            Optional<ResponseDto> responseDto = phoneNumberService.saveNumber(updateDto, messageEntityDto.get());
+            patientMessageHistoryService.saveAddedPhoneNumberHistory(patientId, updateId);
+            return responseDto;
+        }
+
+        return defaultResponseService.createResponse(updateDto);
+    }
+
+    private Optional<ResponseDto> commandHandler(UpdateDto updateDto, List<MessageEntityDto> messageEntitiesWithCommand) {
+        Integer updateId = updateDto.getUpdateId();
+
+        MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
+                .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
+
+        String command = messageEntityDto.getText();
+        BotCommands botCommands = BotCommands.getBotCommands(command);
+
+        return Optional.ofNullable(botCommandHandlers.get(botCommands))
+                .flatMap(handler -> handler.handle(updateDto));
     }
 
     private Optional<ResponseDto> handleCallbackQuery(UpdateDto updateDto, CallbackQueryDto callbackQuery) {
