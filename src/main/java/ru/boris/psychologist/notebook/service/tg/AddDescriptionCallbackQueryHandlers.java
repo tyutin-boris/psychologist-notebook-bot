@@ -3,6 +3,7 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.boris.psychologist.notebook.api.mapper.tg.message.history.PatientMessageHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.callback.CallbackQueryHandlers;
 import ru.boris.psychologist.notebook.dto.tg.CallbackQueryDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AddDescriptionCallbackQueryHandlers implements CallbackQueryHandlers {
 
+    private final PatientMessageHistoryService patientMessageHistoryService;
+
     @Override
     public Optional<ResponseDto> handle(UpdateDto dto) {
         Integer updateId = dto.getUpdateId();
@@ -29,6 +32,19 @@ public class AddDescriptionCallbackQueryHandlers implements CallbackQueryHandler
                 .map(ChatDto::getId)
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Не удалось определить идентификатор чата. updateId: %s", updateId)));
+
+        Optional<Long> patientId = Optional.of(dto)
+                .map(UpdateDto::getCallbackQuery)
+                .map(CallbackQueryDto::getMessage)
+                .map(MessageDto::getChat)
+                .map(ChatDto::getId);
+
+        if (patientId.isEmpty()) {
+            log.error("Не удалось сохранить запись об описании проблемы, у пользователя нет идентификатора. " +
+                    "updateId: {}", updateId);
+        }
+
+        patientId.ifPresent(id -> patientMessageHistoryService.saveAddDescriptionHistory(id, updateId));
 
         ResponseDto response = new ResponseDto();
         response.setText("Опишите пожалуйста вашу проблему.");

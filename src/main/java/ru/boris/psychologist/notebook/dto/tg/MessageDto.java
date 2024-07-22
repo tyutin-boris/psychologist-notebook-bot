@@ -32,4 +32,6 @@ public class MessageDto {
     private List<MessageEntityDto> entities;
 
     private InlineKeyboardMarkupDto replyMarkup;
+
+    private String text;
 }

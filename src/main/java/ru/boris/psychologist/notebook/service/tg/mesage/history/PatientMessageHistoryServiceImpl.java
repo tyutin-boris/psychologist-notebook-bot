@@ -57,4 +57,36 @@ public class PatientMessageHistoryServiceImpl implements PatientMessageHistorySe
         patientMessageHistoryRepository.save(entity);
         log.debug("Сохранена запись о добавлении телефона, для пользователя: {},  updateId: {}", patientId, updateId);
     }
+
+    @Override
+    public void saveAddDescriptionHistory(Long patientId, Integer updateId) {
+        if (patientId == null) {
+            log.error("Не удалось сохранить запись об описании проблемы, у пользователя нет идентификатора. " +
+                    "updateId: {}", updateId);
+            return;
+        }
+
+        PatientMessageHistoryEntity entity = new PatientMessageHistoryEntity();
+        entity.setPatientId(patientId);
+        entity.setHistoryType(PatientMessageHistoryType.ADD_DESCRIPTION);
+
+        patientMessageHistoryRepository.save(entity);
+        log.debug("Сохранена запись об описании проблемы, для пользователя: {},  updateId: {}", patientId, updateId);
+    }
+
+    @Override
+    public void saveAddedDescriptionHistory(Long patientId, Integer updateId) {
+        if (patientId == null) {
+            log.error("Не удалось сохранить запись об добавлении описания, у пользователя нет идентификатора. " +
+                    "updateId: {}", updateId);
+            return;
+        }
+
+        PatientMessageHistoryEntity entity = new PatientMessageHistoryEntity();
+        entity.setPatientId(patientId);
+        entity.setHistoryType(PatientMessageHistoryType.ADDED_DESCRIPTION);
+
+        patientMessageHistoryRepository.save(entity);
+        log.debug("Сохранена запись об добавлении описания, для пользователя: {},  updateId: {}", patientId, updateId);
+    }
 }

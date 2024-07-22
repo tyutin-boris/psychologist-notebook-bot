@@ -11,4 +11,8 @@ public interface PatientMessageHistoryService {
     Optional<PatientMessageHistoryEntity> findLastMessageByPatientId(Long patientId);
 
     void saveAddedPhoneNumberHistory(Long patientId, Integer updateId);
+
+    void saveAddDescriptionHistory(Long patientId, Integer updateId);
+
+    void saveAddedDescriptionHistory(Long patientId, Integer updateId);
 }

@@ -74,4 +74,26 @@ public class PatientServiceImpl implements PatientService {
         log.debug("Успешно обновили номер телефона. username: {}, tgId: {}", username, tgId);
         return true;
     }
+
+    @Override
+    @Transactional
+    public boolean saveDescription(String description, PatientDto dto) {
+        if (dto == null) {
+            log.error("Не удалось сохранить описание проблемы");
+            return false;
+        }
+
+        Long tgId = dto.getTgId();
+        String username = dto.getUsername();
+
+        if (username == null) {
+            log.error("Не удалось сохранить описание проблемы, нет username");
+            return false;
+        }
+
+        patientRepository.updateDescriptionByUsernameAndTgId(description, OffsetDateTime.now(), username, tgId);
+
+        log.debug("Успешно обновили описание проблемы. username: {}, tgId: {}", username, tgId);
+        return true;
+    }
 }

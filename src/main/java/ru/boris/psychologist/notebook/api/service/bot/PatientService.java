@@ -7,4 +7,6 @@ public interface PatientService {
     void saveIfNotExist(PatientDto dto);
 
     boolean savePhoneNumber(String phoneNumber, PatientDto dto);
+
+    boolean saveDescription(String description, PatientDto dto);
 }
