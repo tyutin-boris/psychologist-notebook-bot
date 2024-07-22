@@ -48,99 +48,108 @@ public class UpdateHandlerImpl implements UpdateHandler {
 
     @Override
     public Optional<ResponseDto> handle(UpdateDto updateDto) {
-        Integer updateId = updateDto.getUpdateId();
-        log.debug("Выбор обработчика для события с id: {}", updateId);
-
-        Optional<ResponseDto> response = Optional.empty();
-
         boolean messageIsPresent = Objects.nonNull(updateDto.getMessage());
         if (messageIsPresent) {
-            List<MessageEntityDto> messageEntities = getMessageEntities(updateDto);
-            List<MessageEntityDto> messageEntitiesWithCommand = getMessageEntitiesWithCommand(messageEntities);
-            int commandSize = messageEntitiesWithCommand.size();
-
-            if (commandSize != 0) {
-
-                if (commandSize > 1) {
-                    log.error("В сообщение больше одной команды. id: {}", updateId);
-                    return defaultResponseService.createResponse(updateDto);
-                }
-
-                MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
-                        .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
-
-                String command = messageEntityDto.getText();
-                BotCommands botCommands = BotCommands.getBotCommands(command);
-
-                return Optional.ofNullable(botCommandHandlers.get(botCommands))
-                        .flatMap(handler -> handler.handle(updateDto));
-            }
-
-            List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
-            int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
-
-            Optional<Long> patientIdOpt = Optional.ofNullable(updateDto.getMessage())
-                    .map(MessageDto::getFrom)
-                    .map(UserDto::getId);
-
-            if (patientIdOpt.isEmpty()) {
-                log.error("Не удалось сохранить номер, нет идентификатора пользователя. updateId: {}", updateId);
-            }
-
-            Long patientId = patientIdOpt.get();
-            Optional<PatientMessageHistoryType> historyType = patientMessageHistoryService
-                    .findLastMessageByPatientId(patientId)
-                    .map(PatientMessageHistoryEntity::getHistoryType);
-
-            if (historyType.isPresent() && PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType.get())) {
-                Optional<ResponseDto> responseDto = descriptionService.saveDescription(updateDto);
-                patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
-                return responseDto;
-            }
-
-            if (phoneNumbersSize != 0) {
-
-                if (phoneNumbersSize > 1) {
-                    log.error("В сообщение больше одного номера. id: {}", updateId);
-                    return defaultResponseService.createResponse(updateDto);
-                }
-
-                MessageEntityDto messageEntityDto = messageEntitiesWithPhoneNumber.stream().findFirst()
-                        .orElseThrow(() -> new RuntimeException("В сообщении нет ни одного номера id: " + updateId));
-
-                if (historyType.isPresent() && PatientMessageHistoryType.ADD_PHONE_NUMBER.equals(historyType.get())) {
-                    Optional<ResponseDto> responseDto = phoneNumberService.saveNumber(updateDto, messageEntityDto);
-                    patientMessageHistoryService.saveAddedPhoneNumberHistory(patientId, updateId);
-                    return responseDto;
-                }
-            }
+            return handleMessage(updateDto);
         }
 
         CallbackQueryDto callbackQuery = updateDto.getCallbackQuery();
         boolean callbackQueryIsPresent = Objects.nonNull(callbackQuery);
 
         if (callbackQueryIsPresent) {
-            List<List<InlineKeyboardButtonDto>> keyboardButtonsList = getKeyboardButtonsList(callbackQuery);
-            List<InlineKeyboardButtonDto> keyboardButtons = getKeyboardButtons(keyboardButtonsList);
+            return handleCallbackQuery(updateDto, callbackQuery);
+        }
 
-            int keyboardButtonsSize = keyboardButtons.size();
+        return defaultResponseService.createResponse(updateDto);
+    }
 
-            if (keyboardButtonsSize == 0) {
-                log.error("В сообщение нет ответа на запрос. id: {}", updateId);
+    private Optional<ResponseDto> handleMessage(UpdateDto updateDto) {
+        Integer updateId = updateDto.getUpdateId();
+
+        List<MessageEntityDto> messageEntities = getMessageEntities(updateDto);
+        List<MessageEntityDto> messageEntitiesWithCommand = getMessageEntitiesWithCommand(messageEntities);
+        int commandSize = messageEntitiesWithCommand.size();
+
+        if (commandSize != 0) {
+
+            if (commandSize > 1) {
+                log.error("В сообщение больше одной команды. id: {}", updateId);
                 return defaultResponseService.createResponse(updateDto);
             }
 
-            CallbackTypes callbackType = CallbackTypes.getCallbackType(callbackQuery.getData());
+            MessageEntityDto messageEntityDto = messageEntitiesWithCommand.stream().findFirst()
+                    .orElseThrow(() -> new RuntimeException("В сообщении нет ни одной команды. id: " + updateId));
 
-            response = Optional.ofNullable(callbackQueryHandlers.get(callbackType))
+            String command = messageEntityDto.getText();
+            BotCommands botCommands = BotCommands.getBotCommands(command);
+
+            return Optional.ofNullable(botCommandHandlers.get(botCommands))
                     .flatMap(handler -> handler.handle(updateDto));
         }
 
-        if (response.isEmpty()) {
+        List<MessageEntityDto> messageEntitiesWithPhoneNumber = getMessageEntitiesWithPhoneNumber(messageEntities);
+        int phoneNumbersSize = messageEntitiesWithPhoneNumber.size();
+
+        Optional<Long> patientIdOpt = Optional.ofNullable(updateDto.getMessage())
+                .map(MessageDto::getFrom)
+                .map(UserDto::getId);
+
+        if (patientIdOpt.isEmpty()) {
+            log.debug("Идентификатор пациента не найден. updateId: {}", updateId);
             return defaultResponseService.createResponse(updateDto);
         }
 
-        return response;
+        Long patientId = patientIdOpt.get();
+        Optional<PatientMessageHistoryType> historyType = patientMessageHistoryService
+                .findLastMessageByPatientId(patientId)
+                .map(PatientMessageHistoryEntity::getHistoryType);
+
+        if (historyType.isPresent() && PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType.get())) {
+            Optional<ResponseDto> responseDto = descriptionService.saveDescription(updateDto);
+            patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
+            return responseDto;
+        }
+
+        if (phoneNumbersSize != 0) {
+            if (phoneNumbersSize > 1) {
+                log.error("В сообщение больше одного номера. id: {}", updateId);
+                return defaultResponseService.createResponse(updateDto);
+            }
+
+            Optional<MessageEntityDto> messageEntityDto = messageEntitiesWithPhoneNumber.stream()
+                    .findFirst();
+            if (messageEntityDto.isEmpty()) {
+                log.error("В сообщении нет ни одного номера id: " + updateId);
+                return defaultResponseService.createResponse(updateDto);
+            }
+
+            if (historyType.isPresent() && PatientMessageHistoryType.ADD_PHONE_NUMBER.equals(historyType.get())) {
+                Optional<ResponseDto> responseDto = phoneNumberService.saveNumber(updateDto, messageEntityDto.get());
+                patientMessageHistoryService.saveAddedPhoneNumberHistory(patientId, updateId);
+                return responseDto;
+            }
+        }
+
+        return defaultResponseService.createResponse(updateDto);
+    }
+
+    private Optional<ResponseDto> handleCallbackQuery(UpdateDto updateDto, CallbackQueryDto callbackQuery) {
+        Integer updateId = updateDto.getUpdateId();
+
+        List<List<InlineKeyboardButtonDto>> keyboardButtonsList = getKeyboardButtonsList(callbackQuery);
+        List<InlineKeyboardButtonDto> keyboardButtons = getKeyboardButtons(keyboardButtonsList);
+
+        int keyboardButtonsSize = keyboardButtons.size();
+
+        if (keyboardButtonsSize == 0) {
+            log.error("В сообщение нет ответа на запрос. id: {}", updateId);
+            return defaultResponseService.createResponse(updateDto);
+        }
+
+        CallbackTypes callbackType = CallbackTypes.getCallbackType(callbackQuery.getData());
+
+        return Optional.ofNullable(callbackQueryHandlers.get(callbackType))
+                .flatMap(handler -> handler.handle(updateDto));
     }
 
     private List<MessageEntityDto> getMessageEntitiesWithPhoneNumber(List<MessageEntityDto> messageEntities) {
