@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public enum BotCommands {
 
     START("/start", "Начало диалога"),
+    MY_TG_ID("/tg_id", "Получить свой идентификатор в тг"),
     COMMAND_NOT_DEFINED("/not_defined", "Тип команды не определен");
 
     private final String command;
@@ -26,6 +27,7 @@ public enum BotCommands {
 
         return switch (command) {
             case "/start" -> START;
+            case "/tg_id" -> MY_TG_ID;
             default -> COMMAND_NOT_DEFINED;
         };
     }
