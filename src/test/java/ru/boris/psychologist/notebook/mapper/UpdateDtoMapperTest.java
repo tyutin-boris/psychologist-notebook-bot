@@ -9,19 +9,30 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import ru.boris.psychologist.notebook.api.mapper.tg.CallbackQueryDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.ChatDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.InlineKeyboardButtonDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.InlineKeyboardMarkupDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.MessageDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.MessageEntityDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
+import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapperImpl;
+import ru.boris.psychologist.notebook.api.mapper.tg.UserDtoMapperImpl;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatType;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 import ru.boris.psychologist.notebook.dto.tg.UserDto;
-import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
 
 @SpringJUnitConfig(classes = {
         UpdateDtoMapperImpl.class,
         MessageDtoMapperImpl.class,
         UserDtoMapperImpl.class,
         ChatDtoMapperImpl.class,
-        MessageEntityDtoMapperImpl.class})
+        MessageEntityDtoMapperImpl.class,
+        InlineKeyboardMarkupDtoMapperImpl.class,
+        InlineKeyboardButtonDtoMapperImpl.class,
+        CallbackQueryDtoMapperImpl.class})
 class UpdateDtoMapperTest {
 
     @Autowired
@@ -93,6 +104,7 @@ class UpdateDtoMapperTest {
         UpdateDto dto = new UpdateDto();
         dto.setMessage(messageDto);
 
+
         return dto;
     }
 
@@ -104,6 +116,7 @@ class UpdateDtoMapperTest {
         dto.setMessageId(18);
         dto.setChat(chat);
         dto.setFrom(from);
+        dto.setText("/start");
 
         return dto;
     }

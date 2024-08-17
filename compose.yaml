@@ -18,10 +18,10 @@ services:
     restart: always
     hostname: psydb
     ports:
-      - "5432:5432"
+      - "5002:5432"
     environment:
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER : psyuser
+      POSTGRES_PASSWORD: 77664488
       POSTGRES_DB: psynote
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]

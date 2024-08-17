@@ -2,9 +2,9 @@ spring:
   application:
     name: psychologist-notebook-bot
   datasource:
-    password: postgres
-    username: postgres
-    url: jdbc:postgresql://psydb:5432/psynote
+    username: psyuser
+    password: 77664488
+    url: jdbc:postgresql://psydb:5002/psynote
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
