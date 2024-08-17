@@ -1,12 +1,13 @@
 server:
   port: 9002
+
 spring:
   application:
     name: psychologist-notebook-bot
   datasource:
-    username: psyuser
-    password: 77664488
-    url: jdbc:postgresql://psydb:5002/psynote
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -16,8 +17,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 bot:
-  name: psy_note_book_test_bot
-  token: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
 
 logging:
   level:
