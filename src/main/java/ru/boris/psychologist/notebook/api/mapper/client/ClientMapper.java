@@ -1,22 +1,22 @@
-package ru.boris.psychologist.notebook.api.mapper.bot;
+package ru.boris.psychologist.notebook.api.mapper.client;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.boris.psychologist.notebook.api.mapper.DtoToEntity;
 import ru.boris.psychologist.notebook.api.mapper.EntityToDto;
-import ru.boris.psychologist.notebook.dto.bot.PatientDto;
-import ru.boris.psychologist.notebook.model.entity.PatientEntity;
+import ru.boris.psychologist.notebook.dto.bot.ClientDto;
+import ru.boris.psychologist.notebook.entity.ClientEntity;
 
 @Mapper(componentModel = "spring")
-public interface PatientMapper extends DtoToEntity<PatientEntity, PatientDto>,
-        EntityToDto<PatientDto, PatientEntity> {
+public interface ClientMapper extends DtoToEntity<ClientEntity, ClientDto>,
+        EntityToDto<ClientDto, ClientEntity> {
 
     @Override
-    PatientDto toDto(PatientEntity entity);
+    ClientDto toDto(ClientEntity entity);
 
     @Mapping(target = "updateDateTime", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createDateTime", ignore = true)
     @Override
-    PatientEntity toEntity(PatientDto dto);
+    ClientEntity toEntity(ClientDto dto);
 }

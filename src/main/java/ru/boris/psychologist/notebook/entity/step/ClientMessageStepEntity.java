@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.model.entity;
+package ru.boris.psychologist.notebook.entity.step;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,29 +11,29 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.boris.psychologist.notebook.dto.tg.step.ClientMessageStepType;
 
 import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "patient_message_history")
+@Table(name = "client_message_step")
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientMessageHistoryEntity {
+public class ClientMessageStepEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "patient_id", nullable = false)
-    private Long patientId;
+    @Column(name = "client_id", nullable = false)
+    private Long clientId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "history_type", nullable = false)
-    private PatientMessageHistoryType historyType;
+    @Column(name = "step", nullable = false)
+    private ClientMessageStepType step;
 
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime = OffsetDateTime.now();

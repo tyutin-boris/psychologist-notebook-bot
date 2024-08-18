@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.service.bot.PatientService;
+import ru.boris.psychologist.notebook.api.service.tg.ClientService;
 import ru.boris.psychologist.notebook.api.service.tg.MakeAppointmentService;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MakeAppointmentServiceImpl implements MakeAppointmentService {
 
-    private final PatientService patientService;
+    private final ClientService clientService;
 
     @Override
     public Optional<ResponseDto> saveNameForAppointment(UpdateDto updateDto) {
@@ -33,7 +33,7 @@ public class MakeAppointmentServiceImpl implements MakeAppointmentService {
         Optional<Long> userId = messageOpt.map(MessageDto::getFrom)
                 .map(UserDto::getId);
 
-        userId.ifPresent(id -> patientService.saveNameToContact(id, clientName));
+        userId.ifPresent(id -> clientService.saveNameToContact(id, clientName));
 
         Optional<Long> chatIdOpt = messageOpt.map(MessageDto::getChat)
                 .map(ChatDto::getId);

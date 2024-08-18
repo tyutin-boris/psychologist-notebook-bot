@@ -3,10 +3,10 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.mapper.bot.UserDtoToPatientDtoMapper;
-import ru.boris.psychologist.notebook.api.service.bot.PatientService;
+import ru.boris.psychologist.notebook.api.mapper.client.UserDtoToClientDtoMapper;
+import ru.boris.psychologist.notebook.api.service.tg.ClientService;
 import ru.boris.psychologist.notebook.api.service.tg.PhoneNumberService;
-import ru.boris.psychologist.notebook.dto.bot.PatientDto;
+import ru.boris.psychologist.notebook.dto.bot.ClientDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageEntityDto;
@@ -23,9 +23,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PhoneNumberServiceImpl implements PhoneNumberService {
 
-    private final PatientService patientService;
+    private final ClientService clientService;
 
-    private final UserDtoToPatientDtoMapper userDtoToPatientDtoMapper;
+    private final UserDtoToClientDtoMapper userDtoToClientDtoMapper;
 
     @Override
     public Optional<ResponseDto> saveNumber(UpdateDto dto, MessageEntityDto messageDto) {
@@ -52,15 +52,15 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         }
 
         String phoneNumber = messageDto.getText();
-        Optional<PatientDto> patientDto = message.map(MessageDto::getFrom)
-                .map(userDtoToPatientDtoMapper::toDto);
+        Optional<ClientDto> clientDto = message.map(MessageDto::getFrom)
+                .map(userDtoToClientDtoMapper::toDto);
 
-        if (patientDto.isEmpty()) {
+        if (clientDto.isEmpty()) {
             log.error("Не удалось сохранить номер телефона, нет информации о пациенте. updateId: {}", updateId);
             return errorResponse(chatId);
         }
 
-        boolean phoneIsUpdated = patientService.savePhoneNumber(phoneNumber, patientDto.get());
+        boolean phoneIsUpdated = clientService.savePhoneNumber(phoneNumber, clientDto.get());
         if (phoneIsUpdated) {
             ResponseDto responseDto = new ResponseDto();
             responseDto.setChatId(chatId);

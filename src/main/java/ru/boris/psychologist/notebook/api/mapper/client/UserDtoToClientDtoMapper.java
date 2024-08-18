@@ -1,13 +1,13 @@
-package ru.boris.psychologist.notebook.api.mapper.bot;
+package ru.boris.psychologist.notebook.api.mapper.client;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.boris.psychologist.notebook.api.mapper.DtoToDto;
-import ru.boris.psychologist.notebook.dto.bot.PatientDto;
+import ru.boris.psychologist.notebook.dto.bot.ClientDto;
 import ru.boris.psychologist.notebook.dto.tg.UserDto;
 
 @Mapper(componentModel = "spring")
-public interface UserDtoToPatientDtoMapper extends DtoToDto<UserDto, PatientDto> {
+public interface UserDtoToClientDtoMapper extends DtoToDto<UserDto, ClientDto> {
 
 
     @Mapping(target = "tgId", source = "id")
@@ -15,5 +15,5 @@ public interface UserDtoToPatientDtoMapper extends DtoToDto<UserDto, PatientDto>
     @Mapping(target = "phoneNumber", ignore = true)
     @Mapping(target = "description", ignore = true)
     @Override
-    PatientDto toDto(UserDto userDto);
+    ClientDto toDto(UserDto userDto);
 }

@@ -11,7 +11,6 @@ import java.util.Optional;
  */
 public interface BotCommandHandler {
 
-
     /**
      * Метод обработки команды.
      *

@@ -6,7 +6,7 @@ import lombok.Data;
  * Класс пациент.
  */
 @Data
-public class PatientDto {
+public class ClientDto {
 
     /**
      * Идентификатор телеграм пользователя.

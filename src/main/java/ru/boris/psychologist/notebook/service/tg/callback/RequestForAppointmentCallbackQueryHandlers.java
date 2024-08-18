@@ -3,7 +3,7 @@ package ru.boris.psychologist.notebook.service.tg.callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.mapper.tg.message.history.PatientMessageHistoryService;
+import ru.boris.psychologist.notebook.api.mapper.history.ClientMessageHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.callback.CallbackQueryHandlers;
 import ru.boris.psychologist.notebook.dto.tg.CallbackQueryDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RequestForAppointmentCallbackQueryHandlers implements CallbackQueryHandlers {
 
-    private final PatientMessageHistoryService patientMessageHistoryService;
+    private final ClientMessageHistoryService clientMessageHistoryService;
 
     @Override
     public Optional<ResponseDto> handle(UpdateDto dto) {
@@ -35,18 +35,18 @@ public class RequestForAppointmentCallbackQueryHandlers implements CallbackQuery
                 .orElseThrow(() -> new RuntimeException(
                         String.format("Не удалось определить идентификатор чата. updateId: %s", updateId)));
 
-        Optional<Long> patientId = Optional.of(dto)
+        Optional<Long> clientId = Optional.of(dto)
                 .map(UpdateDto::getCallbackQuery)
                 .map(CallbackQueryDto::getMessage)
                 .map(MessageDto::getChat)
                 .map(ChatDto::getId);
 
-        if (patientId.isEmpty()) {
+        if (clientId.isEmpty()) {
             log.error("Не удалось сохранить запрос записи на прием," +
                     " у пользователя нет идентификатора. updateId: {}", updateId);
         }
 
-        patientId.ifPresent(id -> patientMessageHistoryService.saveRequestForAppointment(id, updateId));
+        clientId.ifPresent(id -> clientMessageHistoryService.saveRequestForAppointment(id, updateId));
 
         ResponseDto response = new ResponseDto();
         response.setText("Как к вам можно обращаться? (укажите имя)");

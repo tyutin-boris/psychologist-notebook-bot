@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.model.entity;
+package ru.boris.psychologist.notebook.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,10 +16,10 @@ import java.time.OffsetDateTime;
 @Table
 @Getter
 @Setter
-@Entity(name = "patient")
+@Entity(name = "client")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientEntity {
+public class ClientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,18 +37,9 @@ public class PatientEntity {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "description", length = 6144)
-    private String description;
-
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime = OffsetDateTime.now();
 
     @Column(name = "update_date_time")
     private OffsetDateTime updateDateTime;
-
-    @Column(name = "name_to_contact", length = 1024)
-    private String nameToContact;
 }

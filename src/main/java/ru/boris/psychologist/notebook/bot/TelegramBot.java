@@ -1,7 +1,5 @@
 package ru.boris.psychologist.notebook.bot;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +13,10 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.api.mapper.tg.SendMessageMapper;
 import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
-import ru.boris.psychologist.notebook.api.repository.UpdateHistoryRepository;
+import ru.boris.psychologist.notebook.api.service.bot.UpdateHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
 import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;
-import ru.boris.psychologist.notebook.model.entity.UpdateHistoryEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +29,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
 
-    private final ObjectMapper objectMapper;
-
     private final BotConfig botConfig;
+
     private final UpdateHandler updateHandler;
-    private final UpdateDtoMapper updateDtoMapper;
-    private final SendMessageMapper sendMessageMapper;
-    private final UpdateHistoryRepository updateHistoryRepository;
 
     private final List<BotCommand> botCommands;
+
+    private final UpdateDtoMapper updateDtoMapper;
+
+    private final SendMessageMapper sendMessageMapper;
+
+    private final UpdateHistoryService updateHistoryService;
 
     @PostConstruct
     private void setUp() {
@@ -59,7 +58,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         log.debug("Получено событие: {}", update);
-        saveUpdateHistory(update);
+        updateHistoryService.saveUpdateHistory(update);
 
         Optional.ofNullable(update)
                 .map(updateDtoMapper::toDto)
@@ -92,21 +91,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             throw new SendMessageException("Не удалось отправить ответ", e);
-        }
-    }
-
-    private void saveUpdateHistory(Update update) {
-        String json = getString(update);
-        UpdateHistoryEntity entity = new UpdateHistoryEntity();
-        entity.setJson(json);
-        updateHistoryRepository.save(entity);
-    }
-
-    private String getString(Update update) {
-        try {
-            return objectMapper.writeValueAsString(update);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
     }
 }

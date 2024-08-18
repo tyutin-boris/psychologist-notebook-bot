@@ -3,9 +3,8 @@ package ru.boris.psychologist.notebook.service.tg.command;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.boris.psychologist.notebook.api.service.tg.ResponseService;
 import ru.boris.psychologist.notebook.api.service.tg.command.BotCommandHandler;
-import ru.boris.psychologist.notebook.dto.tg.ChatDto;
-import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
 import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
@@ -20,24 +19,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NotDefinedBotCommandHandler implements BotCommandHandler {
 
+    private final ResponseService responseService;
+
     @Override
     public Optional<ResponseDto> handle(UpdateDto dto) {
         Integer updateId = dto.getUpdateId();
-        log.debug("Обработчик команды /not_defined, начал обрабатывать событие с id: " + updateId);
+        log.debug("Обработчик команды {}, начал обрабатывать событие с id: {}",
+                BotCommands.COMMAND_NOT_DEFINED, updateId);
 
-        Long chatId = Optional.ofNullable(dto.getMessage())
-                .map(MessageDto::getChat)
-                .map(ChatDto::getId)
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
+        Optional<ResponseDto> response = responseService.getNotDefinedComandResponse(dto);
 
-        ResponseDto response = new ResponseDto();
-        response.setChatId(chatId);
-        response.setText("Я не умею выполнять такую команду. Попробуйте выбрать команду из Меню с лева" +
-                " от поля ввода текста.");
+        log.debug("Обработчик команды {}, закончил обрабатывать событие с id: {}",
+                BotCommands.COMMAND_NOT_DEFINED, updateId);
 
-        log.debug("Обработчик команды /not_defined, закончил обрабатывать событие с id: " + updateId);
-        return Optional.of(response);
+        return response;
     }
 
     @Override

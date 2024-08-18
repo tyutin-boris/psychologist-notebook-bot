@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.boris.psychologist.notebook.api.mapper.bot.PatientMapper;
-import ru.boris.psychologist.notebook.api.repository.PatientRepository;
-import ru.boris.psychologist.notebook.api.service.bot.PatientService;
-import ru.boris.psychologist.notebook.dto.bot.PatientDto;
-import ru.boris.psychologist.notebook.model.entity.PatientEntity;
+import ru.boris.psychologist.notebook.api.mapper.client.ClientMapper;
+import ru.boris.psychologist.notebook.api.repository.ClientRepository;
+import ru.boris.psychologist.notebook.api.service.tg.ClientService;
+import ru.boris.psychologist.notebook.dto.bot.ClientDto;
+import ru.boris.psychologist.notebook.entity.ClientEntity;
 
 import java.time.OffsetDateTime;
 
@@ -18,17 +18,17 @@ import java.time.OffsetDateTime;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PatientServiceImpl implements PatientService {
+public class ClientServiceImpl implements ClientService {
 
 
-    private final PatientMapper patientMapper;
+    private final ClientMapper clientMapper;
 
-    private final PatientRepository patientRepository;
+    private final ClientRepository clientRepository;
 
     @Override
-    public void saveIfNotExist(PatientDto dto) {
+    public void saveIfNotExist(ClientDto dto) {
         if (dto == null) {
-            log.error("Не удалось сохранить пациента");
+            log.error("Не удалось сохранить информацию о клиенте dto is null");
             return;
         }
 
@@ -36,26 +36,27 @@ public class PatientServiceImpl implements PatientService {
         String username = dto.getUsername();
 
         if (username == null) {
-            log.error("Не удалось сохранить пациента, нет username");
+            log.error("Не удалось сохранить клиента, нет username");
             return;
         }
 
-        boolean userExist = patientRepository.existsByUsernameOrTgId(username, tgId);
+        boolean userExist = clientRepository.existsByUsernameOrTgId(username, tgId);
 
         if (userExist) {
-            log.debug("Запись о пациенте с username: {} уже есть", username);
+            log.debug("Запись о клиенте с username: {} уже есть", username);
             return;
         }
 
-        log.debug("Сохраняем пациента. username: {}, tgId: {}", username, tgId);
-        PatientEntity entity = patientMapper.toEntity(dto);
-        PatientEntity savedEntity = patientRepository.save(entity);
-        log.debug("Успешно сохранили пациента. username: {}, tgId: {}, id: {}", username, tgId, savedEntity.getId());
+        log.debug("Сохраняем клиент. username: {}, tgId: {}", username, tgId);
+        ClientEntity entity = clientMapper.toEntity(dto);
+        ClientEntity savedEntity = clientRepository.save(entity);
+        log.debug("Успешно сохранили информацию о клиенте. username: {}, tgId: {}, id: {}",
+                username, tgId, savedEntity.getId());
     }
 
     @Override
     @Transactional
-    public boolean savePhoneNumber(String phoneNumber, PatientDto dto) {
+    public boolean savePhoneNumber(String phoneNumber, ClientDto dto) {
         if (dto == null) {
             log.error("Не удалось сохранить номер пациента пациента");
             return false;
@@ -69,7 +70,7 @@ public class PatientServiceImpl implements PatientService {
             return false;
         }
 
-        patientRepository.updatePhoneNumberByUsernameAndTgId(phoneNumber, OffsetDateTime.now(), username, tgId);
+        clientRepository.updatePhoneNumberByUsernameAndTgId(phoneNumber, OffsetDateTime.now(), username, tgId);
 
         log.debug("Успешно обновили номер телефона. username: {}, tgId: {}", username, tgId);
         return true;
@@ -77,7 +78,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public boolean saveDescription(String description, PatientDto dto) {
+    public boolean saveDescription(String description, ClientDto dto) {
         if (dto == null) {
             log.error("Не удалось сохранить описание проблемы");
             return false;
@@ -91,7 +92,7 @@ public class PatientServiceImpl implements PatientService {
             return false;
         }
 
-        patientRepository.updateDescriptionByUsernameAndTgId(description, OffsetDateTime.now(), username, tgId);
+        clientRepository.updateDescriptionByUsernameAndTgId(description, OffsetDateTime.now(), username, tgId);
 
         log.debug("Успешно обновили описание проблемы. username: {}, tgId: {}", username, tgId);
         return true;
@@ -101,7 +102,7 @@ public class PatientServiceImpl implements PatientService {
     @Transactional
     public void saveNameToContact(Long id, String nameToContact) {
         log.debug("Попытка сохранить имя для обращения. tgId: {}", id);
-        patientRepository.updateNameToContactByTgId(nameToContact, id);
+        clientRepository.updateNameToContactByTgId(nameToContact, id);
         log.debug("Имя для обращения сохранено. tgId: {}", id);
     }
 }

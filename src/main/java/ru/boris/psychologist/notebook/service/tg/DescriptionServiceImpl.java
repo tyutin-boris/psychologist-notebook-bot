@@ -3,10 +3,10 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.mapper.bot.UserDtoToPatientDtoMapper;
-import ru.boris.psychologist.notebook.api.service.bot.PatientService;
+import ru.boris.psychologist.notebook.api.mapper.client.UserDtoToClientDtoMapper;
+import ru.boris.psychologist.notebook.api.service.tg.ClientService;
 import ru.boris.psychologist.notebook.api.service.tg.DescriptionService;
-import ru.boris.psychologist.notebook.dto.bot.PatientDto;
+import ru.boris.psychologist.notebook.dto.bot.ClientDto;
 import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
@@ -22,9 +22,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DescriptionServiceImpl implements DescriptionService {
 
-    private final PatientService patientService;
+    private final ClientService clientService;
 
-    private final UserDtoToPatientDtoMapper userDtoToPatientDtoMapper;
+    private final UserDtoToClientDtoMapper userDtoToClientDtoMapper;
 
     @Override
     public Optional<ResponseDto> saveDescription(UpdateDto dto) {
@@ -45,16 +45,16 @@ public class DescriptionServiceImpl implements DescriptionService {
             return errorResponse(chatId);
         }
 
-        Optional<PatientDto> patientDto = message.map(MessageDto::getFrom)
-                .map(userDtoToPatientDtoMapper::toDto);
+        Optional<ClientDto> clientDto = message.map(MessageDto::getFrom)
+                .map(userDtoToClientDtoMapper::toDto);
 
 
-        if (patientDto.isEmpty()) {
+        if (clientDto.isEmpty()) {
             log.error("Не удалось добавить описание проблемы, нет информации о пациенте. updateId: {}", updateId);
             return errorResponse(chatId);
         }
 
-        boolean descriptionSaved = patientService.saveDescription(description.get(), patientDto.get());
+        boolean descriptionSaved = clientService.saveDescription(description.get(), clientDto.get());
         if(descriptionSaved) {
             ResponseDto responseDto = new ResponseDto();
             responseDto.setChatId(chatId);

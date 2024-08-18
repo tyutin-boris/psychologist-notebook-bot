@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.boris.psychologist.notebook.api.mapper.bot.UserDtoToPatientDtoMapper;
-import ru.boris.psychologist.notebook.api.service.bot.PatientService;
-import ru.boris.psychologist.notebook.api.service.tg.StartResponseService;
+import ru.boris.psychologist.notebook.api.mapper.client.UserDtoToClientDtoMapper;
+import ru.boris.psychologist.notebook.api.service.tg.ClientService;
+import ru.boris.psychologist.notebook.api.service.tg.ResponseService;
 import ru.boris.psychologist.notebook.api.service.tg.command.BotCommandHandler;
-import ru.boris.psychologist.notebook.dto.tg.ChatDto;
 import ru.boris.psychologist.notebook.dto.tg.MessageDto;
 import ru.boris.psychologist.notebook.dto.tg.ResponseDto;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
@@ -24,35 +23,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StartBotCommandHandler implements BotCommandHandler {
 
-    private final PatientService patientService;
+    private final ClientService clientService;
 
-    private final StartResponseService startResponseService;
+    private final ResponseService responseService;
 
-    private final UserDtoToPatientDtoMapper userDtoToPatientDtoMapper;
+    private final UserDtoToClientDtoMapper userDtoToClientDtoMapper;
 
     @Override
     @Transactional
     public Optional<ResponseDto> handle(UpdateDto dto) {
         Integer updateId = dto.getUpdateId();
-        log.debug("Обработчик команды /start, начал обрабатывать событие с id: " + updateId);
+        log.debug("Обработчик команды {}, начал обрабатывать событие с id: {}",
+                BotCommands.START.getCommand(), updateId);
 
-        MessageDto message = dto.getMessage();
-        Optional<MessageDto> messageOpt = Optional.ofNullable(message);
+        Optional.ofNullable(dto.getMessage())
+                .map(MessageDto::getFrom)
+                .map(userDtoToClientDtoMapper::toDto)
+                .ifPresent(clientService::saveIfNotExist);
 
-        Long chatId = messageOpt
-                .map(MessageDto::getChat)
-                .map(ChatDto::getId)
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("Не удалось определить идентификатор чата. messageId: %s", updateId)));
+        Optional<ResponseDto> startResponseDto = responseService.getStartCommandResponse(dto);
 
-        messageOpt.map(MessageDto::getFrom)
-                .map(userDtoToPatientDtoMapper::toDto)
-                .ifPresent(patientService::saveIfNotExist);
+        log.debug("Обработчик команды {}, закончил обрабатывать событие с id: {}",
+                BotCommands.START.getCommand(), updateId);
 
-        log.debug("Обработчик команды /start, закончил обрабатывать событие с id: " + updateId);
-        ResponseDto responseDto = startResponseService.getStartResponseDto(message, chatId);
-
-        return Optional.of(responseDto);
+        return startResponseDto;
     }
 
     @Override

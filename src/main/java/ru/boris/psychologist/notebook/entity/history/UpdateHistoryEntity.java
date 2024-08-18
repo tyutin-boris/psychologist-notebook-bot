@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.model.entity;
+package ru.boris.psychologist.notebook.entity.history;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
