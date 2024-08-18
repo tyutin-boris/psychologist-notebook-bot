@@ -36,4 +36,10 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long> {
                                             @Param("updateDateTime") OffsetDateTime updateDateTime,
                                             @Param("username") String username,
                                             @Param("tgId") Long tgId);
+
+    @Modifying
+    @Query(value = "update patient p " +
+            "set p.nameToContact = :nameToContact " +
+            "where p.tgId = :tgId")
+    void updateNameToContactByTgId(@Param("nameToContact") String nameToContact, @Param("tgId") Long tgId);
 }

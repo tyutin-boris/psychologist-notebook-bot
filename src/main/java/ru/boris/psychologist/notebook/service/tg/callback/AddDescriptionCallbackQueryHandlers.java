@@ -1,4 +1,4 @@
-package ru.boris.psychologist.notebook.service.tg;
+package ru.boris.psychologist.notebook.service.tg.callback;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

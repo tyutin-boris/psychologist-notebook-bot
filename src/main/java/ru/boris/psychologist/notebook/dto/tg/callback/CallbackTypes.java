@@ -11,6 +11,7 @@ public enum CallbackTypes {
 
     ADD_PHONE_NUMBER("Добавить номер телефона.", "add_phone_number"),
     ADD_DESCRIPTION("Описать проблему.", "add_description"),
+    MAKE_AN_APPOINTMENT("Записаться на приём.", "make_an_appointment"),
     NOT_DEFINED_CALLBACK_TYPE("", "not_defined_callback_type");
 
     private final String text;
@@ -25,6 +26,7 @@ public enum CallbackTypes {
         return switch (callbackData) {
             case "add_phone_number" -> ADD_PHONE_NUMBER;
             case "add_description" -> ADD_DESCRIPTION;
+            case "make_an_appointment" -> MAKE_AN_APPOINTMENT;
             default -> NOT_DEFINED_CALLBACK_TYPE;
         };
     }

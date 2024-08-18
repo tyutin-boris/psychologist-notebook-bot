@@ -21,6 +21,24 @@ public class PatientMessageHistoryServiceImpl implements PatientMessageHistorySe
     private final PatientMessageHistoryRepository patientMessageHistoryRepository;
 
     @Override
+    public void saveRequestForAppointment(Long patientId, Integer updateId) {
+        if (patientId == null) {
+            log.error("Не удалось сохранить запрос записи на прием," +
+                    " у пользователя нет идентификатора. updateId: {}", updateId);
+            return;
+        }
+
+        PatientMessageHistoryEntity entity = new PatientMessageHistoryEntity();
+        entity.setPatientId(patientId);
+        entity.setHistoryType(PatientMessageHistoryType.REQUEST_FOR_APPOINTMENT);
+
+        patientMessageHistoryRepository.save(entity);
+        log.debug("Запрос записи на прием сохранен," +
+                " для пользователя: {},  updateId: {}", patientId, updateId);
+    }
+
+
+    @Override
     public void saveAddPhoneNumberHistory(Long patientId, Integer updateId) {
         if (patientId == null) {
             log.error("Не удалось сохранить запись о запросе на добавление телефона," +

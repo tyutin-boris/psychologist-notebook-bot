@@ -96,4 +96,12 @@ public class PatientServiceImpl implements PatientService {
         log.debug("Успешно обновили описание проблемы. username: {}, tgId: {}", username, tgId);
         return true;
     }
+
+    @Override
+    @Transactional
+    public void saveNameToContact(Long id, String nameToContact) {
+        log.debug("Попытка сохранить имя для обращения. tgId: {}", id);
+        patientRepository.updateNameToContactByTgId(nameToContact, id);
+        log.debug("Имя для обращения сохранено. tgId: {}", id);
+    }
 }

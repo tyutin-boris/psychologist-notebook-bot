@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.mapper.tg.message.history.PatientMessageHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.DefaultResponseService;
 import ru.boris.psychologist.notebook.api.service.tg.DescriptionService;
+import ru.boris.psychologist.notebook.api.service.tg.MakeAppointmentService;
 import ru.boris.psychologist.notebook.api.service.tg.PhoneNumberService;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
 import ru.boris.psychologist.notebook.api.service.tg.callback.CallbackQueryHandlers;
@@ -45,6 +46,8 @@ public class UpdateHandlerImpl implements UpdateHandler {
     private final Map<CallbackTypes, CallbackQueryHandlers> callbackQueryHandlers;
 
     private final PatientMessageHistoryService patientMessageHistoryService;
+
+    private final MakeAppointmentService makeAppointmentService;
 
     @Override
     public Optional<ResponseDto> handle(UpdateDto updateDto) {
@@ -106,17 +109,29 @@ public class UpdateHandlerImpl implements UpdateHandler {
             return phoneNumbersHandler(historyType, patientId, updateDto, messageEntitiesWithPhoneNumber);
         }
 
-        return descriptionHandler(historyType, patientId, updateDto);
+        return messageHandler(historyType, patientId, updateDto);
     }
 
-    private Optional<ResponseDto> descriptionHandler(
-            Optional<PatientMessageHistoryType> historyType,
+    private Optional<ResponseDto> messageHandler(
+            Optional<PatientMessageHistoryType> historyTypeOpt,
             Long patientId,
             UpdateDto updateDto) {
         Integer updateId = updateDto.getUpdateId();
 
-        if (historyType.isPresent() && PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType.get())) {
+        if (historyTypeOpt.isEmpty()) {
+            return defaultResponseService.createResponse(updateDto);
+        }
+
+        PatientMessageHistoryType historyType = historyTypeOpt.get();
+
+        if (PatientMessageHistoryType.ADD_DESCRIPTION.equals(historyType)) {
             Optional<ResponseDto> responseDto = descriptionService.saveDescription(updateDto);
+            patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
+            return responseDto;
+        }
+
+        if (PatientMessageHistoryType.REQUEST_FOR_APPOINTMENT.equals(historyType)) {
+            Optional<ResponseDto> responseDto = makeAppointmentService.saveNameForAppointment(updateDto);
             patientMessageHistoryService.saveAddedDescriptionHistory(patientId, updateId);
             return responseDto;
         }

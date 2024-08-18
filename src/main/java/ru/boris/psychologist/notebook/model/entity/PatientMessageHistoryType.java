@@ -11,5 +11,7 @@ public enum PatientMessageHistoryType {
 
     ADDED_PHONE_NUMBER,
 
-    ADDED_DESCRIPTION;
+    ADDED_DESCRIPTION,
+
+    REQUEST_FOR_APPOINTMENT
 }

@@ -9,4 +9,6 @@ public interface PatientService {
     boolean savePhoneNumber(String phoneNumber, PatientDto dto);
 
     boolean saveDescription(String description, PatientDto dto);
+
+    void saveNameToContact(Long id, String clientName);
 }

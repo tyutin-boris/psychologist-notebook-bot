@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface PatientMessageHistoryService {
 
+    void saveRequestForAppointment(Long patientId, Integer updateId);
+
     void saveAddPhoneNumberHistory(Long patientId, Integer updateId);
 
     Optional<PatientMessageHistoryEntity> findLastMessageByPatientId(Long patientId);

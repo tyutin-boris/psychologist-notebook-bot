@@ -48,4 +48,7 @@ public class PatientEntity {
 
     @Column(name = "update_date_time")
     private OffsetDateTime updateDateTime;
+
+    @Column(name = "name_to_contact", length = 1024)
+    private String nameToContact;
 }
