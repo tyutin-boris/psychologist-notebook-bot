@@ -1,5 +1,5 @@
 server:
-  port: 9002
+  port: 9010
 spring:
   application:
     name: psychologist-notebook-bot
@@ -16,8 +16,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 bot:
-  name: psy_note_book_test_bot
-  token: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q
+  name: psy_local_bot
+  token: 7361935702:AAGoMNQrc0AcDJT6C28a__xOgqlC1SgybrM
 
 logging:
   level:
