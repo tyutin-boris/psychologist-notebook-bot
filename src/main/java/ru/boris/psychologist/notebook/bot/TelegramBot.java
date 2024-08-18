@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.boris.psychologist.notebook.api.mapper.tg.SendMessageMapper;
 import ru.boris.psychologist.notebook.api.mapper.tg.UpdateDtoMapper;
-import ru.boris.psychologist.notebook.api.service.bot.UpdateHistoryService;
+import ru.boris.psychologist.notebook.api.service.tg.history.UpdateHistoryService;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
 import ru.boris.psychologist.notebook.config.BotConfig;
 import ru.boris.psychologist.notebook.exception.SendMessageException;

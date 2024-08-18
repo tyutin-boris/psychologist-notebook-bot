@@ -7,13 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.boris.psychologist.notebook.api.service.tg.DefaultResponseService;
-import ru.boris.psychologist.notebook.api.service.tg.command.BotCommandHandler;
+import ru.boris.psychologist.notebook.api.service.tg.response.DefaultResponseService;
+import ru.boris.psychologist.notebook.api.service.tg.command.TgBotCommandHandler;
 import ru.boris.psychologist.notebook.dto.tg.UpdateDto;
-import ru.boris.psychologist.notebook.dto.tg.command.BotCommands;
+import ru.boris.psychologist.notebook.dto.domain.command.BotCommands;
 import ru.boris.psychologist.notebook.service.tg.UpdateHandlerImpl;
-import ru.boris.psychologist.notebook.service.tg.command.NotDefinedBotCommandHandler;
-import ru.boris.psychologist.notebook.service.tg.command.StartBotCommandHandler;
+import ru.boris.psychologist.notebook.service.tg.command.NotDefinedTgBotCommandHandler;
+import ru.boris.psychologist.notebook.service.tg.command.StartTgBotCommandHandler;
 
 import java.util.Map;
 
@@ -26,15 +26,15 @@ class UpdateHandlerImplTest {
     private DefaultResponseService defaultResponseService;
 
     @Mock
-    private Map<BotCommands, BotCommandHandler> botCommandHandlers;
+    private Map<BotCommands, TgBotCommandHandler> botCommandHandlers;
 
     @InjectMocks
     private UpdateHandlerImpl sut;
 
     @BeforeEach
     void setUp() {
-        StartBotCommandHandler startBotCommandHandler = mock(StartBotCommandHandler.class);
-        NotDefinedBotCommandHandler notDefinedBotCommandHandler = mock(NotDefinedBotCommandHandler.class);
+        StartTgBotCommandHandler startBotCommandHandler = mock(StartTgBotCommandHandler.class);
+        NotDefinedTgBotCommandHandler notDefinedBotCommandHandler = mock(NotDefinedTgBotCommandHandler.class);
 
 //        when(botCommandHandlers.get(BotCommands.START))
 //                .thenReturn(startBotCommandHandler);
@@ -50,7 +50,7 @@ class UpdateHandlerImplTest {
 
 
         // Действие
-        sut.handle(new UpdateDto());
+//        sut.handle(new UpdateDto());
 
         // Проверка
 

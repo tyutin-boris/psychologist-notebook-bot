@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.boris.psychologist.notebook.api.mapper.DtoToEntity;
 import ru.boris.psychologist.notebook.api.mapper.EntityToDto;
-import ru.boris.psychologist.notebook.dto.bot.ClientDto;
+import ru.boris.psychologist.notebook.dto.domain.ClientDto;
 import ru.boris.psychologist.notebook.entity.ClientEntity;
 
 @Mapper(componentModel = "spring")

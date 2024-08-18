@@ -3,7 +3,7 @@ package ru.boris.psychologist.notebook.service.tg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.boris.psychologist.notebook.api.service.tg.DefaultResponseService;
+import ru.boris.psychologist.notebook.api.service.tg.response.DefaultResponseService;
 import ru.boris.psychologist.notebook.api.service.tg.UpdateHandler;
 import ru.boris.psychologist.notebook.api.service.tg.callback.TgCallbackQueryService;
 import ru.boris.psychologist.notebook.api.service.tg.command.TgCommandService;

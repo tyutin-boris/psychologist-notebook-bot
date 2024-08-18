@@ -3,7 +3,7 @@ package ru.boris.psychologist.notebook.api.mapper.client;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.boris.psychologist.notebook.api.mapper.DtoToDto;
-import ru.boris.psychologist.notebook.dto.bot.ClientDto;
+import ru.boris.psychologist.notebook.dto.domain.ClientDto;
 import ru.boris.psychologist.notebook.dto.tg.UserDto;
 
 @Mapper(componentModel = "spring")
