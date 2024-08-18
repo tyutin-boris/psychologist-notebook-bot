@@ -48,7 +48,7 @@ public class StartBotCommandHandler implements BotCommandHandler {
 
         ResponseDto response = new ResponseDto();
         response.setChatId(chatId);
-        response.setText("Привет! Я бот.");
+        response.setText(getHelloMessage(dto.getMessage().getFrom().getFirstName()));
         response.setReplyMarkup(List.of(addPhoneNumber, addDescription));
 
         message.map(MessageDto::getFrom)
@@ -58,6 +58,11 @@ public class StartBotCommandHandler implements BotCommandHandler {
         log.debug("Обработчик команды /start, закончил обрабатывать событие с id: " + updateId);
 
         return Optional.of(response);
+    }
+
+    private String getHelloMessage(String firstName) {
+        return "Здравствуй, " + firstName + ". Я бот-помощник семейных психологов \n" +
+                "Сергея и Ольги Тютиных. Выбери, что тебя интересует.";
     }
 
     @Override
