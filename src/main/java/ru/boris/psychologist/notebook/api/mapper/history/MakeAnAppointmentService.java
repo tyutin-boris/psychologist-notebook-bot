@@ -10,4 +10,8 @@ public interface MakeAnAppointmentService {
     void saveNextStepAppointmentAddPhoneNumber(Long clientId, Integer updateId);
 
     void saveAppointmentAddPossibleCallTime(Long clientId, Integer updateId);
+
+    void saveAppointmentAddQuestion(Long clientId, Integer updateId);
+
+    void saveAppointmentAddEnd(Long clientId, Integer updateId);
 }

@@ -41,6 +41,34 @@ public class MakeAnAppointmentServiceImpl implements MakeAnAppointmentService {
 
     @Override
     public void saveAppointmentAddPossibleCallTime(Long clientId, Integer updateId) {
+        ClientMessageStepEntity entity = new ClientMessageStepEntity();
+        entity.setClientId(clientId);
+        entity.setNextStep(ClientMessageStepType.MAKE_AN_APPOINTMENT_ADD_POSSIBLE_CALL_TIME);
 
+        clientMessageStepRepository.save(entity);
+        log.debug("Текущее состояние переписки добавление возможного времени для звонка. updateId: {}, clientId: {}",
+                clientId, updateId);
+    }
+
+    @Override
+    public void saveAppointmentAddQuestion(Long clientId, Integer updateId) {
+        ClientMessageStepEntity entity = new ClientMessageStepEntity();
+        entity.setClientId(clientId);
+        entity.setNextStep(ClientMessageStepType.MAKE_AN_APPOINTMENT_ADD_QUESTION);
+
+        clientMessageStepRepository.save(entity);
+        log.debug("Текущее состояние переписки добавление вопроса для обращения. updateId: {}, clientId: {}",
+                clientId, updateId);
+    }
+
+    @Override
+    public void saveAppointmentAddEnd(Long clientId, Integer updateId) {
+        ClientMessageStepEntity entity = new ClientMessageStepEntity();
+        entity.setClientId(clientId);
+        entity.setNextStep(ClientMessageStepType.MAKE_AN_APPOINTMENT_ADD_END);
+
+        clientMessageStepRepository.save(entity);
+        log.debug("Текущее состояние переписки запись закончена. updateId: {}, clientId: {}",
+                clientId, updateId);
     }
 }

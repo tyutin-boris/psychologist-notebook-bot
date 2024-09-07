@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.boris.psychologist.notebook.api.mapper.history.MakeAnAppointmentService;
+import ru.boris.psychologist.notebook.api.service.domain.appoitment.AppointmentService;
 import ru.boris.psychologist.notebook.api.service.tg.ChatDtoService;
 import ru.boris.psychologist.notebook.api.service.tg.callback.TgCallbackQueryHandlers;
 import ru.boris.psychologist.notebook.api.service.tg.response.DefaultResponseService;
@@ -23,6 +24,8 @@ import java.util.Optional;
 public class MakeAnAppointmentTgCallbackQueryHandlers implements TgCallbackQueryHandlers {
 
     private final ChatDtoService chatDtoService;
+
+    private final AppointmentService appointmentService;
 
     private final DefaultResponseService defaultResponseService;
 
@@ -47,6 +50,7 @@ public class MakeAnAppointmentTgCallbackQueryHandlers implements TgCallbackQuery
         Long clientId = clientIdOpt.get();
         log.debug("Клиент. updateId: {}, clientId: {}", updateId, clientId);
 
+        appointmentService.saveAppointment(clientId);
         makeAnAppointmentService.saveNextStepAppointmentAddName(clientId, updateId);
         Optional<ResponseDto> response = responseAppointmentService.getNameToContactResponse(dto);
 

@@ -12,4 +12,8 @@ public interface ResponseAppointmentService {
     Optional<ResponseDto> getPhoneNumberResponse(UpdateDto dto);
 
     Optional<ResponseDto> getPossibleCallTime(UpdateDto dto);
+
+    Optional<ResponseDto> getEndResponse(UpdateDto dto);
+
+    Optional<ResponseDto> getQquestionResponse(UpdateDto dto);
 }

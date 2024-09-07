@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.boris.psychologist.notebook.api.repository.appointment.AppointmentRepository;
 import ru.boris.psychologist.notebook.api.service.domain.appoitment.AppointmentService;
+import ru.boris.psychologist.notebook.dto.domain.callback.PossibleCallTime;
+import ru.boris.psychologist.notebook.entity.appointment.AppointmentEntity;
 
 /**
  * Реализация сервиса для.
@@ -31,5 +33,33 @@ public class AppointmentServiceImpl implements AppointmentService {
         log.debug("Попытка сохранить номер телефона для обращения. tgId: {}", clientId);
         appointmentRepository.updatePhoneNumberByTgId(phoneNumber, clientId);
         log.debug("Номер телефона для обращения сохранено. tgId: {}", clientId);
+    }
+
+    @Override
+    @Transactional
+    public void saveQuestion(Long clientId, String question) {
+        log.debug("Попытка сохранить вопрос клиента. tgId: {}", clientId);
+        appointmentRepository.updateQuestionByTgId(question, clientId);
+        log.debug("Вопрос клиента для обращения сохранен. tgId: {}", clientId);
+    }
+
+    @Override
+    @Transactional
+    public void savePossibleCallTime(Long clientId, PossibleCallTime possibleCallTime) {
+        log.debug("Попытка сохранить время звонка. tgId: {}", clientId);
+        appointmentRepository.updatePossibleCallTime(possibleCallTime.getTime(), clientId);
+        log.debug("Время звонка для обращения сохранен. tgId: {}", clientId);
+    }
+
+    @Override
+    @Transactional
+    public void saveAppointment(Long clientId) {
+        log.debug("Создаем новое обращение clientId: {}", clientId);
+        AppointmentEntity entity = new AppointmentEntity();
+
+        entity.setTgId(clientId);
+
+        appointmentRepository.save(entity);
+        log.debug("Обращение создано clientId: {}", clientId);
     }
 }

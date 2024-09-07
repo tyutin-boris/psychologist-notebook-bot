@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface UserDtoService {
 
     Optional<Long> getUserId(UpdateDto dto);
+
+    Optional<Long> getUserIdFromCallBack(UpdateDto dto);
 }

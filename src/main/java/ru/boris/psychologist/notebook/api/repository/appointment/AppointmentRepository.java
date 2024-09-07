@@ -12,14 +12,30 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
 
     @Modifying
     @Query("update appointment a " +
-            "set a.nameToContact = :nameToContact " +
+            "set a.nameToContact = :nameToContact, " +
+            "    a.updateDateTime = current_timestamp " +
             "where a.tgId = :clientId")
     void updateNameToContactByTgId(@Param("nameToContact") String nameToContact, @Param("clientId") Long clientId);
 
 
     @Modifying
     @Query("update appointment a " +
-            "set a.phoneNumber = :phoneNumber " +
+            "set a.phoneNumber = :phoneNumber, " +
+            "    a.updateDateTime = current_timestamp " +
             "where a.tgId = :clientId")
     void updatePhoneNumberByTgId(@Param("phoneNumber") String phoneNumber, @Param("clientId") Long clientId);
+
+    @Modifying
+    @Query("update appointment a " +
+            "set a.question = :question, " +
+            "    a.updateDateTime = current_timestamp " +
+            "where a.tgId = :clientId")
+    void updateQuestionByTgId(@Param("question") String question, @Param("clientId") Long clientId);
+
+    @Modifying
+    @Query("update appointment a " +
+            "set a.possibleTime = :possibleTime, " +
+            "    a.updateDateTime = current_timestamp " +
+            "where a.tgId = :clientId")
+    void updatePossibleCallTime(@Param("possibleTime") String possibleTime, @Param("clientId") Long clientId);
 }

@@ -31,8 +31,11 @@ public class AppointmentEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "description", length = 6144)
-    private String description;
+    @Column(name = "question", length = 6144)
+    private String question;
+
+    @Column(name = "possible_time", length = 1024)
+    private String possibleTime;
 
     @Column(name = "name_to_contact", length = 1024)
     private String nameToContact;
