@@ -55,6 +55,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public void saveAppointment(Long clientId) {
         log.debug("Создаем новое обращение clientId: {}", clientId);
+        if(appointmentRepository.existsByTgId(clientId)) {
+            log.debug("Обращение уже было создано clientId: {}", clientId);
+            return;
+        }
+
         AppointmentEntity entity = new AppointmentEntity();
 
         entity.setTgId(clientId);

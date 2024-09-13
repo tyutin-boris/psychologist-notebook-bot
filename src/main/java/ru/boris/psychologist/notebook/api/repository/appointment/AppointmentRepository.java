@@ -38,4 +38,6 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
             "    a.updateDateTime = current_timestamp " +
             "where a.tgId = :clientId")
     void updatePossibleCallTime(@Param("possibleTime") String possibleTime, @Param("clientId") Long clientId);
+
+    boolean existsByTgId(@Param("tgId") Long tgId);
 }
