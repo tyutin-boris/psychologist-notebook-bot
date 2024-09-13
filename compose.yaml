@@ -11,9 +11,9 @@ services:
       psydb:
         condition: service_healthy
     environment:
-      BOT_NAME: psy_note_book_test_bot
-      BOT_TOKEN: 6904427337:AAEq3B8uvrNwB6GZ-cyu4nvL9lpEpAcoA-Q
-      SPRING_DATASOURCE_URL: jdbc:postgresql://psydb:5002/psynote
+      BOT_NAME: psy_local_bot
+      BOT_TOKEN: 7361935702:AAGoMNQrc0AcDJT6C28a__xOgqlC1SgybrM
+      SPRING_DATASOURCE_URL: jdbc:postgresql://psydb:5432/psynote
       SPRING_DATASOURCE_USERNAME: psyuser
       SPRING_DATASOURCE_PASSWORD: 77664488
 
